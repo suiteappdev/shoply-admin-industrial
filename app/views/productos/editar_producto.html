@@ -32,7 +32,49 @@
 	  		</div>
 	  	</div>
   	<div class="row" ng-show="selected == 'album'">
-  		<image-uploader area="square" title="Galeria del producto" button-text="Cargar imagenes" ng-model="$parent.formEdit.data.gallery"><image-uploader>
+  	<div class="col-lg-6">
+	        <legend class="text-center" style="font-size:14px!important;margin-bottom:5px;">Caracteristicas</legend>
+	        <div class="col-lg-8">
+		        <div class="form-group">
+		        	<label>Descripcion del color:</label>
+					<input type="text" placeholder="Color" required class="form-control input-sm" ng-model="$parent.apariencia.descripcionColor">
+		        </div>
+
+	        </div>
+	        <div class="col-lg-2">
+	        	<label>Color:</label>
+				<div colorpicker="hex" type="text" class="form-control" ng-model="$parent.apariencia.color" style="width:20px;height:30px;background-color:{{apariencia.color}};"></div>	        	
+	        </div>
+	        <div style="position: relative;top: 20px;display: inline-block;">
+				<button class="custom-btn custom-btn-primary"ng-click="addColorEdit()">Agregar</button>
+	        </div>
+	        <div class="col-lg-12">
+            <div class="table-responsive">
+               <table class="table table-hover">
+                <thead>
+                  <th>Descripcion</th>
+                  <th>Color</th>
+                  <th></th>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="color in  $parent.formEdit.data.color">
+                    <td>{{color.descripcion}}</td>
+                    <td><span style="background-color:{{color.color}};" class="label">&nbsp;&nbsp;&nbsp;</span></td>
+                    <td class="text-right">
+                    <a style="width:auto;" ng-click="removeColorEdit()" class="custom-btn-tiny btn-block btn-danger"><i class="glyphicon glyphicon-trash"></i>&nbsp;Quitar</a>
+                    </td> 
+                  </tr>
+                  <tr ng-show="!$parent.formEdit.data.color || $parent.formEdit.data.color.length == 0">
+                  	<td colspan="3"><p class="text-center"><i class="glyphicon glyphicon-info-sign"></i>&nbsp;Aun no se han agregado colores</p></td>
+                  </tr>
+                </tbody>
+              </table>      
+            </div>	        	
+	        </div>
+  	</div>
+  	<div class="col-lg-6">
+  		<image-uploader area="square" title="Galeria del producto" button-text="Cargar imagenes" ng-model="$parent.formEdit.data.gallery"><image-uploader>  		
+  	</div>
   	</div>
   	<div class="row" ng-show="selected == 'stock'">
 	  	<div class="col-lg-12">

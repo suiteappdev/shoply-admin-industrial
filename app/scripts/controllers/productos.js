@@ -20,6 +20,36 @@ angular.module('shoplyApp')
       });
     }
 
+    $scope.addColor = function(){
+      if(!$scope.form.data.color){
+        $scope.form.data.color = [];
+        $scope.form.data.color.push({descripcion : $scope.apariencia.descripcionColor, color : $scope.apariencia.color});
+      }else{
+        $scope.form.data.color.push({descripcion : $scope.apariencia.descripcionColor, color : $scope.apariencia.color});
+      }
+
+      delete $scope.apariencia;
+    }
+
+    $scope.removeColor = function(){
+      $scope.form.data.color.splice($scope.form.data.color.indexOf(this.color), 1);
+    }
+
+    $scope.addColorEdit = function(){
+      if(!$scope.formEdit.data.color){
+        $scope.formEdit.data.color = [];
+        $scope.formEdit.data.color.push({descripcion : $scope.apariencia.descripcionColor, color : $scope.apariencia.color});
+      }else{
+        $scope.formEdit.data.color.push({descripcion : $scope.apariencia.descripcionColor, color : $scope.apariencia.color});
+      }
+
+      delete $scope.apariencia;
+    }
+
+    $scope.removeColorEdit = function(){
+      $scope.formEdit.data.color.splice($scope.formEdit.data.color.indexOf(this.color), 1);
+    }
+
     $scope.verImpuestos = function(){
       $scope.record = this.record._iva;
       window.modal = modal.show({templateUrl : 'views/productos/verIvas.html', size :'sm', scope: $scope, backdrop:'static'}, function($scope){
@@ -404,12 +434,14 @@ angular.module('shoplyApp')
                 }
               }));
            }else{
-              form.data.component = angular.copy($scope.recordsProductosEdit.map(function(component){
-                return {
-                  _id : component._id,
-                  cantidad : component.data.cantidad
-                }
-              }));
+              if($scope.recordsProductosEdit){
+                form.data.component = angular.copy($scope.recordsProductosEdit.map(function(component){
+                  return {
+                    _id : component._id,
+                    cantidad : component.data.cantidad
+                  }
+                }));              
+              }
            } 
 
           api.producto($scope.formEdit._id).put(form).success(function(res){
