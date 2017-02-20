@@ -61,8 +61,8 @@ angular.module('shoplyApp')
                if (isConfirm) {
                     api.categoria(_record._id).delete().success(function(res){
                         if(res){
-                            $scope.records.splice($scope.records.indexOf(_record), 1);
                              delete $rootScope.selectedNode;
+                             $scope.load();
                         }
                     });
                }

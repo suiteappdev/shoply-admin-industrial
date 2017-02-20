@@ -8,7 +8,7 @@
  * Controller of the shoplyApp
  */
 angular.module('shoplyApp')
-  .controller('ProductosCtrl',["$scope", "$rootScope", "modal", "api", "constants", "$state", function ($scope, $rootScope, modal, api, constants, $state) {
+  .controller('ProductosCtrl',["$scope", "$rootScope", "modal", "api", "constants", "$state","storage",  function ($scope, $rootScope, modal, api, constants, $state, storage) {
     $scope.Records = false; 
     $scope.recordsProductos = [];
     $scope.recordsServices = [];
@@ -18,14 +18,24 @@ angular.module('shoplyApp')
         $scope.records = res || [];
         $scope.Records = true;
       });
+
+      if(angular.fromJson(storage.get('recentColors'))){
+          $scope.recentsColors = angular.fromJson(storage.get('recentColors'));
+      }
+    }
+
+    $scope.loadRecent = function(){
+      $scope.form.data.color = $scope.recentsColors;
     }
 
     $scope.addColor = function(){
       if(!$scope.form.data.color){
         $scope.form.data.color = [];
         $scope.form.data.color.push({descripcion : $scope.apariencia.descripcionColor, color : $scope.apariencia.color});
+        storage.save('recentColors', $scope.form.data.color);
       }else{
         $scope.form.data.color.push({descripcion : $scope.apariencia.descripcionColor, color : $scope.apariencia.color});
+         storage.save('recentColors', $scope.form.data.color);
       }
 
       delete $scope.apariencia;
@@ -570,6 +580,11 @@ angular.module('shoplyApp')
                       if(res){
                           $scope.load();
                           $scope.$close();
+
+                          if(storage.get('recentsColors')){
+                              storage.save('recentsColors', scope.form.data.color)
+                          }
+
                           delete $scope.form.data;
                           sweetAlert("Registro completado.", "has registrado un nuevo producto.", "success");
                       }

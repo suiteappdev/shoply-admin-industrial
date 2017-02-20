@@ -95,12 +95,61 @@ angular.module('shoplyApp')
     opened: false
   };
 
+  $scope.data_export = [];
   
    $scope.load = function(){
       api.pedido().get().success(function(res){
           $scope.records = res || [];
-          $scope.Records = true;          
+          $scope.Records = true;
+
+          for (var i = 0; i < $scope.records.length; i++) {
+              for (var y = 0; y < $scope.records[i].shoppingCart.length; y++) {
+                  var _row = {};
+                  
+                  _row.ref = $scope.records[i].shoppingCart[y].refMixed;
+                  _row.descripcion = $scope.records[i].shoppingCart[y].producto;
+                  _row.unidades = $scope.records[i].shoppingCart[y].cantidad;
+                  _row.dcto = $scope.records[i].data.descuento || 0;
+                  _row.costo =  $scope.records[i].shoppingCart[y].precio || 0;
+                  
+                  _row.precio_venta = $scope.records[i].shoppingCart[y].precio_VentaFacturado || $scope.records[i].shoppingCart[y].precio_Venta || 0                 
+                  _row.valor_iva = $scope.records[i].shoppingCart[y].valor_iva
+                  _row.valor_utilidad = $scope.records[i].shoppingCart[y].valor_utilidad || 0
+
+                  _row.dcto = $scope.records[i].data.descuento || 0;
+                  _row.numpedido = $scope.records[i].id;
+
+                  $scope.data_export.push(_row);
+              };
+          };
+
       });
+    }
+
+    $scope.generateExport = function(){
+      if(this.record && this.record.shoppingCart){
+          this.single_data_export = [];
+
+          for (var y = 0; y < this.record.shoppingCart.length; y++) {
+              var _row = {};
+              
+              _row.ref = this.record.shoppingCart[y].refMixed;
+              _row.descripcion = this.record.shoppingCart[y].producto;
+              _row.unidades = this.record.shoppingCart[y].cantidad;
+              _row.dcto = this.record.data.descuento || 0;
+              _row.costo =  this.record.shoppingCart[y].precio || 0;
+              
+              _row.precio_venta = this.record.shoppingCart[y].precio_VentaFacturado || this.record.shoppingCart[y].precio_Venta || 0                 
+              _row.valor_iva = this.record.shoppingCart[y].valor_iva
+              _row.valor_utilidad = this.record.shoppingCart[y].valor_utilidad || 0
+
+              _row.dcto = this.record.data.descuento || 0;
+              _row.numpedido = this.record.id;
+
+              this.single_data_export.push(_row);
+          };        
+      }
+
     }
 
     $scope.location = function(){

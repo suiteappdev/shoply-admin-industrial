@@ -46,6 +46,7 @@
 		        <div class="form-group">
 		        	<label>Descripcion del color:</label>
 					<input type="text" placeholder="Color" required class="form-control input-sm" ng-model="$parent.apariencia.descripcionColor">
+					<a ng-show="recentsColors && recentsColors.length > 0"  href="" ng-click="loadRecent()" class="label label-primary">({{recentsColors.length}}) colores recientes.</a>
 		        </div>
 
 	        </div>
@@ -65,7 +66,7 @@
                   <th></th>
                 </thead>
                 <tbody>
-                  <tr ng-repeat="color in  $parent.form.data.color">
+                  <tr dir-paginate="color in  $parent.form.data.color | itemsPerPage: 4" pagination-id="colorEntity">
                     <td>{{color.descripcion}}</td>
                     <td><span style="background-color:{{color.color}};" class="label">&nbsp;&nbsp;&nbsp;</span></td>
                     <td class="text-right">
@@ -76,8 +77,9 @@
                   	<td colspan="3"><p class="text-center"><i class="glyphicon glyphicon-info-sign"></i>&nbsp;Aun no se han agregado colores</p></td>
                   </tr>
                 </tbody>
-              </table>      
-            </div>	        	
+              </table>
+          		<dir-pagination-controls class="pull-right" pagination-id="colorEntity"></dir-pagination-controls>            
+            </div>
 	        </div>
   	</div>
   	<div class="col-lg-6">

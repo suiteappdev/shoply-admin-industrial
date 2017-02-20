@@ -57,7 +57,7 @@
                   <th></th>
                 </thead>
                 <tbody>
-                  <tr ng-repeat="color in  $parent.formEdit.data.color">
+                  <tr dir-paginate="color in  $parent.formEdit.data.color | itemsPerPage: 4" pagination-id="colorEntityEdit">
                     <td>{{color.descripcion}}</td>
                     <td><span style="background-color:{{color.color}};" class="label">&nbsp;&nbsp;&nbsp;</span></td>
                     <td class="text-right">
@@ -68,7 +68,8 @@
                   	<td colspan="3"><p class="text-center"><i class="glyphicon glyphicon-info-sign"></i>&nbsp;Aun no se han agregado colores</p></td>
                   </tr>
                 </tbody>
-              </table>      
+              </table> 
+				<dir-pagination-controls class="pull-right" pagination-id="colorEntityEdit"></dir-pagination-controls>  
             </div>	        	
 	        </div>
   	</div>
