@@ -316,12 +316,11 @@
 				      <tr>
 				        <th>Codigo</th>
 				        <th>Componente</th>
-				        <th>Cantidad</th>
-				        <th>Cantidad Conversión</th>
-				        <th>Unidad</th>
-				        <th>Unidad Conversión</th>
 				        <th>Base</th>
 				        <th>Base + Iva</th>
+				        <th>Cantidad</th>
+				        <th>Precio Componente</th>
+				        <th>Unidad</th>
 				        <th></th>
 				      </tr>
 				    </thead>
@@ -330,13 +329,14 @@
 				      <tr pagination-id="ProductComponentEntity" dir-paginate="record in recordsProductos |filter:search |itemsPerPage: 5 ">
 				        <td>{{record.idcomposed}}</td>
 				        <td>{{record.producto}}</td>
+						<td>{{record.precio || 0  | currency:"$ "}}</td>
+			        	<td>{{record.precio + record.valor_iva || 0  | currency:"$ "}}</td>
 				        <td>
-			        	<input ng-change="onTypeQty()" type="number" ng-init="record.data.cantidad = 1;"  ng-model="record.data.cantidad" class="form-control input-sm" >				        	
+			        	<input ng-change="onTypeQty()" type="number" ng-model="record.data.cantidad" class="form-control input-sm" >				        	
 			        	</td>
-			        	<td>{{record.unidadDeMedida || 'no definida'}}</td>
-			        	<td>{{record.data.baseComponent || record.precio || 0  | currency:"$ "}}</td>
-			        	<td>{{record.data.baseIva || (record.precio + record.valor_iva) || 0  | currency:"$ "}}</td>
-				       	<td><button ng-click="removefromComponentList()" type="button" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i>&nbsp;Quitar</button></td>
+			        	<td>{{record.data.baseComponent || (record.precio + record.valor_iva) | currency:"$ "}}</td>
+			        	<td>{{record.isConversion ? record.conversion.unidadText : record.unidadDeMedida}}</td>
+				       	<td><button ng-click="removefromComponentList()" type="button" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i></button></td>
 				        <td></td>
 				      </tr>
 				      <tr ng-show="totalBase">
