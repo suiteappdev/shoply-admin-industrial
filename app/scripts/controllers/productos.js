@@ -12,6 +12,28 @@ angular.module('shoplyApp')
     $scope.Records = false; 
     $scope.recordsProductos = [];
     $scope.recordsServices = [];
+    
+    $scope.unidades = [
+        {"label":"Metros", "value":"M", rel:[{"label":"Centimetros", "value":"CM", numeric : 100}, {"label":"Milimimetros", "value":"MM", numeric:1000}, {"label":"Decimetros", "value":"DC", numeric: 10} ,{"label":"Metros", "value":"M", numeric : 1}]}
+    ];
+
+    $scope.setUnidadValue = function(){
+      angular.forEach($scope.unidades, function(v, k){
+        if($scope.unidades[k].value == $scope.form.data.unidadDeMedida){
+          $scope.unidadObject = v;
+          return;          
+        }
+      });
+    }
+
+    $scope.setUnidadValueEdit = function(){
+      angular.forEach($scope.unidades, function(v, k){
+        if($scope.unidades[k].value == $scope.formEdit.data.unidadDeMedida){
+          $scope.unidadObjectEdit = v;
+          return;          
+        }
+      });
+    }
 
     $scope.load = function(){
       api.producto().get().success(function(res){
@@ -22,6 +44,85 @@ angular.module('shoplyApp')
       if(angular.fromJson(storage.get('recentColors'))){
           $scope.recentsColors = angular.fromJson(storage.get('recentColors'));
       }
+    }
+
+    $scope.conversiones = function(){
+          if(!$scope.form.data.cantidad){
+              toastr.warning('Debe digitar una cantidad.');
+              return;          
+          }
+
+          $scope._rel = $scope.unidadObject.rel;
+
+          if($scope.form.data.cantidad){
+              $scope.unidadCantidad = $scope.form.data.cantidad;
+          }
+
+          $scope.onSelectRel = function(){
+            $scope.unidadCantidad = angular.copy($scope.form.data.cantidad) * parseInt($scope.unidadSet);
+            
+            angular.forEach($scope._rel, function(v, k){
+              if($scope._rel[k].numeric == $scope.unidadSet){
+                 $scope.unidadText = $scope._rel[k].label;
+                 $scope.unidadTextElevado = $scope.unidadText + '²';  
+                return; 
+              }
+            });
+          }
+
+          $scope.onChangeAreaVolumen = function(){
+           $scope.cantidadTotalUnidades = (($scope.unidadCantidad) * ($scope.areaVolumen)) + ' ' + $scope.unidadTextElevado;
+          }
+
+         modal.show({templateUrl : 'views/productos/conversiones.html', size :'lg', scope: $scope, backdrop:'static', windowClass : 'modal-center'}, function($scope){
+            $scope.form.data.conversion = {};
+            $scope.form.data.conversion.unidadCantidad = $scope.unidadCantidad || null;
+            $scope.form.data.conversion.unidadSet = $scope.unidadSet || null;
+            $scope.form.data.conversion.areaVolumen = $scope.areaVolumen || null;
+            $scope.form.data.conversion.cantidadTotalUnidades = $scope.cantidadTotalUnidades || null;
+            $scope.$close();                  
+         });
+    }
+
+    $scope.conversionesEdit = function(){
+          if(!$scope.formEdit.data.cantidad){
+              toastr.warning('Debe digitar una cantidad.');
+              return;          
+          }
+
+          $scope.setUnidadValueEdit();
+          $scope._relEdit = $scope.unidadObjectEdit.rel;
+
+          if($scope.formEdit.data.cantidad){
+              $scope.unidadCantidadEdit = $scope.formEdit.data.cantidad;
+          }
+
+          $scope.onSelectRelEdit = function(){
+            $scope.unidadCantidadEdit = angular.copy($scope.formEdit.data.cantidad) * parseInt($scope.unidadSetEdit);
+            
+            angular.forEach($scope._relEdit, function(v, k){
+              if($scope._relEdit[k].numeric == $scope.unidadSetEdit){
+                 $scope.unidadTextEdit = $scope._relEdit[k].label;
+                 $scope.unidadTextElevadoEdit = $scope.unidadTextEdit + '²';  
+                return; 
+              }
+            });
+          }
+
+
+          $scope.onChangeAreaVolumenEdit = function(){
+           $scope.cantidadTotalUnidadesEdit = (($scope.unidadCantidadEdit) * ($scope.areaVolumenEdit)) + ' ' + $scope.unidadTextElevadoEdit;
+          }
+
+         modal.show({templateUrl : 'views/productos/editar_conversiones.html', size :'lg', scope: $scope, backdrop:'static'}, function($scope){
+                $scope.formEdit.data.conversion = {};
+                $scope.formEdit.data.conversion.unidadCantidad = $scope.unidadCantidadEdit || null;
+                $scope.formEdit.data.conversion.unidadSet = $scope.unidadSetEdit || null;
+                $scope.formEdit.data.conversion.areaVolumen = $scope.areaVolumenEdit || null;
+                $scope.formEdit.data.conversion.cantidadTotalUnidades = $scope.cantidadTotalUnidadesEdit || null;
+                
+                $scope.$close();                  
+         });
     }
 
     $scope.loadRecent = function(){
@@ -361,9 +462,15 @@ angular.module('shoplyApp')
       $scope.formEdit._category = this.record._category ? this.record._category._id : null;
       $scope.formEdit._commercial_home = this.record._commercial_home ? this.record._commercial_home._id : null;
       $scope.ivaValue = this.record._iva ? this.record._iva.data.valor : 0;
-
       $scope.formEdit._iva = this.record._iva ? this.record._iva._id : null;
-      
+
+      if($scope.formEdit.data.conversion){
+        $scope.unidadCantidadEdit = $scope.formEdit.data.conversion.unidadCantidad || null;
+        $scope.unidadSetEdit = $scope.formEdit.data.conversion.unidadSet || null;
+        $scope.areaVolumenEdit = $scope.formEdit.data.conversion.areaVolumen || null;
+        $scope.cantidadTotalUnidadesEdit =  $scope.formEdit.data.conversion.cantidadTotalUnidades || null;
+      }
+
       if($scope.formEdit.data.tags){
         $scope.tags = $scope.formEdit.data.tags.map(function(o){
             var _obj = new Object();

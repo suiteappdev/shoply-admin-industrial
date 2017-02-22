@@ -272,11 +272,17 @@
 			<div class="col-lg-4">
 				<div class="form-group">
 					<label>Unidade de Medida</label>
-					<selectize 
-						config="{maxItems:1, placeholder:'Unidad de Medida', labelField:'label', valueField :'value' }" 
-						options='[{"label":"K", "value":"K"}, {"label":"UND", "value":"UND"}, {"label":"L", "value":"L"}, {"label":"M", "value":"M"}]' 
-						ng-model="$parent.form.data.unidadDeMedida">
-					</selectize>
+					<div class="input-group">
+						<selectize
+							ng-change="setUnidadValue()" 
+							config="{maxItems:1, placeholder:'Unidad de Medida', labelField:'label', valueField :'value' }" 
+							options='unidades' 
+							ng-model="$parent.form.data.unidadDeMedida">
+						</selectize>
+						<span class="input-group-btn">
+							<button ng-click="conversiones()" class="btn custom-btn-primary" style="top: -3px;padding:4px 12px;!important" type="button">Conversión</button>
+						</span>
+					</div>
 				</div>
 			</div>
 			<div class="col-lg-12">
@@ -311,7 +317,9 @@
 				        <th>Codigo</th>
 				        <th>Componente</th>
 				        <th>Cantidad</th>
-				        <th>Medida/Cantidad</th>
+				        <th>Cantidad Conversión</th>
+				        <th>Unidad</th>
+				        <th>Unidad Conversión</th>
 				        <th>Base</th>
 				        <th>Base + Iva</th>
 				        <th></th>

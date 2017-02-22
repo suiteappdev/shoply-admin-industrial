@@ -358,13 +358,17 @@
 				</div>
 			</div>
 			<div class="col-lg-4">
-				<div class="form-group">
+				<div class="input-group">
 					<label>Unidade de Medida</label>
 					<selectize 
+						ng-change="setUnidadValueEdit()"
 						config="{maxItems:1, placeholder:'Unidad de Medida', labelField:'label', valueField :'value' }" 
-						options='[{"label":"K", "value":"K"}, {"label":"L", "value":"L"}, {"label":"M", "value":"M"}]' 
+						options='unidades' 
 						ng-model="$parent.formEdit.data.unidadDeMedida">
 					</selectize>
+					<span class="input-group-btn" style="top:10px;">
+					<button ng-click="conversionesEdit()" class="btn custom-btn-primary" style="top: -3px;padding:4px 12px;!important" type="button">Conversión</button>
+					</span>
 				</div>
 			</div>
 	  		</form>
