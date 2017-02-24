@@ -222,8 +222,8 @@ angular.module('shoplyApp')
           this.record.data.baseComponent = (this.record.precio_venta  || this.record.precio) / ((this.record.conversion.areaVolumen) * (this.record.conversion.unidadCantidad)) * angular.copy(this.record.cantidad);
           this.record.data.baseIva = (this.record.precio_venta  ||  this.record.precio + this.record.valor_iva) * this.record.cantidad;
       }else{
-          this.record.data.baseComponent = (this.record.precio * this.record.data.cantidad); 
-          this.record.data.baseIva = (this.record.precio + this.record.valor_iva) * this.record.cantidad;
+          this.record.data.baseComponent = (this.record.precio_venta || this.record.precio  * this.record.data.cantidad); 
+          this.record.data.baseIva = (this.record.precio_venta  || this.record.precio + this.record.valor_iva) * this.record.cantidad;
       }
     }
 

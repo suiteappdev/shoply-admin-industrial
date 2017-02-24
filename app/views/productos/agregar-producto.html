@@ -335,7 +335,7 @@
 			        	<input ng-change="onTypeQty()" type="number" ng-model="record.cantidad" class="form-control input-sm" >				        	
 			        	</td>
 			        	<td>{{record.data.baseComponent || (record.precio + record.valor_iva) | currency:"$ "}}</td>
-			        	<td>{{record.conversio ? record.conversion.unidadText : record.unidadDeMedida}}</td>
+			        	<td>{{record.converion ? record.conversion.unidadText : record.unidadDeMedida}}</td>
 				       	<td><button ng-click="removefromComponentList()" type="button" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i></button></td>
 				        <td></td>
 				      </tr>
