@@ -326,13 +326,13 @@
 				    </thead>
 				    <tbody>
 	                  <td ng-show="!recordsProductos || recordsProductos.length == 0" colspan="6" style="text-align:center!important;"><i class="glyphicon glyphicon-info-sign"></i>&nbsp;{{'No se han agregado componentes aún;'}}</td>
-				      <tr pagination-id="ProductComponentEntity" dir-paginate="record in recordsProductos |filter:search |itemsPerPage: 5 ">
+				      <tr ng-init="setBaseComponente()"  pagination-id="ProductComponentEntity" dir-paginate="record in recordsProductos |filter:search |itemsPerPage: 5 ">
 				        <td>{{record.idcomposed}}</td>
 				        <td>{{record.producto}}</td>
 						<td>{{record.precio || 0  | currency:"$ "}}</td>
-			        	<td>{{record.precio + record.valor_iva || 0  | currency:"$ "}}</td>
+			        	<td>{{(record.precio_venta || record.precio  )|| 0  | currency:"$ "}}</td>
 				        <td>
-			        	<input ng-change="onTypeQty()" type="number" ng-model="record.data.cantidad" class="form-control input-sm" >				        	
+			        	<input ng-change="onTypeQty()" type="number" ng-model="record.cantidad" class="form-control input-sm" >				        	
 			        	</td>
 			        	<td>{{record.data.baseComponent || (record.precio + record.valor_iva) | currency:"$ "}}</td>
 			        	<td>{{record.isConversion ? record.conversion.unidadText : record.unidadDeMedida}}</td>

@@ -72,6 +72,7 @@ angular.module('shoplyApp')
 
           $scope.onChangeAreaVolumen = function(){
            $scope.cantidadTotalUnidades = (($scope.unidadCantidad) * ($scope.areaVolumen)) + ' ' + $scope.unidadTextElevado;
+
           }
 
          modal.show({templateUrl : 'views/productos/conversiones.html', size :'lg', scope: $scope, backdrop:'static', windowClass : 'modal-center'}, function($scope){
@@ -96,7 +97,7 @@ angular.module('shoplyApp')
           $scope.unidadCantidadEdit = $scope.formEdit.data.conversion.unidadCantidad;
 
           $scope.onSelectRelEdit = function(){
-            $scope.unidadCantidadEdit = angular.copy($scope.unidadCantidadEdit ) * parseInt($scope.unidadSetEdit);
+            $scope.unidadCantidadEdit = angular.copy($scope.formEdit.data.cantidad ) * parseInt($scope.unidadSetEdit);
             
             angular.forEach($scope._relEdit, function(v, k){
               if($scope._relEdit[k].numeric == $scope.unidadSetEdit){
@@ -181,24 +182,49 @@ angular.module('shoplyApp')
       }
     });
 
+    $scope.setBaseComponente = function(){
+      if(this.record.conversion){
+          this.record.data.baseComponent = (this.record.precio_venta  || this.record.precio) / ((this.record.conversion.areaVolumen)*(this.record.conversion.unidadCantidad)) * angular.copy(this.record.cantidad);
+          this.record.data.baseIva = (this.record.precio + this.record.valor_iva) * this.record.data.cantidad; 
+      }
+    }
+
+    $scope.setBaseComponenteEdit = function(){
+      if(this.record.conversion){
+          this.record.cantidad = this.record.data.cantidad; 
+          this.record.data.baseComponent = (this.record.precio_venta  || this.record.precio) / ((this.record.conversion.areaVolumen) * (this.record.conversion.unidadCantidad)) * angular.copy(this.record.cantidad);
+          this.record.data.baseIva = (this.record.precio + this.record.valor_iva) * this.record.data.cantidad; 
+      }
+    }
+
     $scope.onTypeQty = function(){
       if(this.record.conversion){
-          this.record.data.baseComponent = ($scope._productAddObj.precio || $scope._productAddObj.precio_venta ) / ($scope._productAddObj.conversion.areaVolumen) * this.record.data.cantidad; 
-          this.record.data.baseIva = (this.record.precio + this.record.valor_iva) * this.record.data.cantidad;
+          this.record.data.baseComponent = (this.record.precio_venta  || this.record.precio) / ((this.record.conversion.areaVolumen) * (this.record.conversion.unidadCantidad)) * angular.copy(this.record.cantidad);
+          this.record.data.baseIva = (this.record.precio + this.record.valor_iva) * this.record.data.cantidad; 
       }else{
-          this.record.data.baseComponent = (this.record.precio * this.record.data.cantidad); 
-          this.record.data.baseIva = (this.record.precio + this.record.valor_iva) * this.record.data.cantidad;
+          this.record.data.baseComponent = (this.record.precio_venta || this.record.precio * this.record.data.cantidad); 
+          this.record.data.baseIva = (this.record.precio_venta || this.record.precio + this.record.valor_iva) * this.record.data.cantidad;
       }
     }
 
     $scope.onTypeQtyEdit = function(){
-      this.record.data.baseComponent = (this.record.precio * this.record.data.cantidad); 
-      this.record.data.baseIva = (this.record.precio + this.record.valor_iva) * this.record.data.cantidad; 
+      if(this.record.conversion){
+          this.record.data.baseComponent = (this.record.precio || this.record.precio_venta ) / (this.record.conversion.areaVolumen) * this.record.cantidad; 
+          this.record.data.baseIva = (this.record.precio + this.record.valor_iva) * this.record.cantidad;
+      }else{
+          this.record.data.baseComponent = (this.record.precio * this.record.data.cantidad); 
+          this.record.data.baseIva = (this.record.precio + this.record.valor_iva) * this.record.cantidad;
+      }
     }
 
     $scope.onTypeQtyEditComponent = function(){
-      this.record.data.baseComponent = (this.record.precio * this.record.data.cantidad); 
-      this.record.data.baseIva = (this.record.precio + this.record.valor_iva) * this.record.data.cantidad; 
+      if(this.record.conversion){
+          this.record.data.baseComponent = (this.record.precio_venta  || this.record.precio) / ((this.record.conversion.areaVolumen) * (this.record.conversion.unidadCantidad)) * angular.copy(this.record.cantidad);
+          this.record.data.baseIva = (this.record.precio_venta  ||  this.record.precio + this.record.valor_iva) * this.record.cantidad;
+      }else{
+          this.record.data.baseComponent = (this.record.precio * this.record.data.cantidad); 
+          this.record.data.baseIva = (this.record.precio + this.record.valor_iva) * this.record.cantidad;
+      }
     }
 
     $scope.totalizeBase = function(){
@@ -393,18 +419,67 @@ angular.module('shoplyApp')
 
     $scope.$watch('_productAddEdit', function(n, o){
       if(n){
-          $scope._productAddObjEdit.data = {};
-          $scope._productAddObjEdit.data.cantidad = 1;
-          
-          if($scope.recordsProductosEdit){
-             $scope.recordsProductosEdit.push($scope._productAddObjEdit);
-          }else{
-            $scope.recordsProductosEdit = [];
-             $scope.recordsProductosEdit.push($scope._productAddObjEdit);
-          }
+              var _default = {
+                 title: "Está Seguro?",
+                 text: "Este Producto tiene conversiones desea trabajar con el.",
+                 type: "warning",
+                 confirmButtonColor: "#DD6B55", 
+                   confirmButtonText: "Si",
+                   cancelButtonText: "No",
+                   showCancelButton: true,
+                   closeOnConfirm: false,
+                   closeOnCancel: false
+              }
 
-          delete $scope._productAddEdit;
+              if($scope._productAddObjEdit.conversion){
+                  window.sweet = sweetAlert(_default , function(isConfirm){
+                    if(isConfirm){
+                          $scope._productAddObjEdit.data = {};
+                          $scope._productAddObjEdit.data.cantidad = 1;
+                          $scope._productAddObjEdit.data.baseComponent = ($scope._productAddObjEdit.precio || $scope._productAddObjEdit.precio_venta ) / ($scope._productAddObjEdit.conversion.areaVolumen);
+                          $scope._productAddObjEdit.isConversion = true;
+                          
+                          if($scope.recordsProductosEdit){
+                             $scope.recordsProductosEdit.push($scope._productAddObjEdit);
+                              $scope.$apply();
+                             window.sweetAlert.close();
+                             
+                             return;
+                          }else{
+                            $scope.recordsProductosEdit = [];
+                            $scope.recordsProductosEdit.push($scope._productAddObjEdit);
+                              $scope.$apply();
+                             window.sweetAlert.close();
+                             
+                             return;
+                          }
+                    }else{
+                      alert("no")
+                      $scope._productAddObjEdit.data = {};
+                      $scope._productAddObjEdit.data.cantidad = 1;
+                      
+                      if($scope.recordsProductosEdit){
+                          $scope.recordsProductosEdit.push($scope._productAddObjEdit);
+                          $scope.$apply();
+                          window.sweetAlert.close();
+                          return;
+                      }else{
+                          $scope.recordsProductosEdit = [];
+                          $scope.recordsProductosEdit.push($scope._productAddObjEdit);
+                          $scope.$apply();
+                          window.sweetAlert.close();
+                          return;   
+                      }
+                    }
+                  });              
+                }else{
+                       $scope._productAddObjEdit.data = {};
+                       $scope._productAddObjEdit.data.cantidad = 1;
+                       $scope.recordsProductosEdit.push($scope._productAddObjEdit);
+                }        
       }
+
+              delete $scope._productAddEdit;
     }, true);
 
     //service watcher
@@ -587,7 +662,7 @@ angular.module('shoplyApp')
               form.data.component = angular.copy($scope.recordsProductosEdit.map(function(component){
                 return {
                   _id : component._id,
-                  cantidad : component.data.cantidad
+                  cantidad : component.cantidad
                 }
               }));
            }else{
@@ -595,7 +670,7 @@ angular.module('shoplyApp')
                 form.data.component = angular.copy($scope.recordsProductosEdit.map(function(component){
                   return {
                     _id : component._id,
-                    cantidad : component.data.cantidad
+                    cantidad : component.cantidad
                   }
                 }));              
               }

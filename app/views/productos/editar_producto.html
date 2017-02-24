@@ -174,32 +174,34 @@
 				      <tr>
 				        <th>Codigo</th>
 				        <th>Componente</th>
-				        <th>Cantidad</th>
-				        <th>Medida/Cantidad</th>
 				        <th>Base</th>
 				        <th>Base + Iva</th>
+				        <th>Cantidad</th>
+				        <th>Precio Componente</th>
+				        <th>Unidad</th>
 				        <th></th>
 				      </tr>
 				    </thead>
 				    <tbody>
 	                  <td ng-show="!recordsProductosEdit || recordsProductosEdit.length == 0" colspan="6" style="text-align:center!important;"><i class="glyphicon glyphicon-info-sign"></i>&nbsp;{{'No se han agregado componentes aún;'}}</td>
-				      <tr pagination-id="ProductComponentEntityEdit" dir-paginate="record in recordsProductosEdit |filter:search |itemsPerPage: 5 ">
+				      <tr  pagination-id="ProductComponentEntityEdit" dir-paginate="record in recordsProductosEdit |filter:search |itemsPerPage: 5 ">
 				        <td>{{record.idcomposed}}</td>
 				        <td>{{record.producto}}</td>
+						<td>{{record.precio || 0  | currency:"$ "}}</td>
+			        	<td>{{(record.precio_venta || record.precio ) || 0  | currency:"$ "}}</td>
 				        <td>
-			        	<input ng-change="onTypeQtyEditComponent()" type="number" ng-model="record.data.cantidad" class="form-control input-sm" >				        	
+			        	<input  ng-init="setBaseComponenteEdit(record.data.cantidad)" ng-change="onTypeQtyEditComponent()" type="number" ng-model="record.cantidad" class="form-control input-sm" >				        	
 			        	</td>
-			        	<td>{{record.unidadDeMedida || 'no definida'}}</td>
-			        	<td>{{record.data.baseComponent || record.precio || 0  | currency:"$ "}}</td>
-			        	<td>{{record.data.baseIva || (record.precio + record.valor_iva) || 0  | currency:"$ "}}</td>
-				       	<td><button ng-click="removefromComponentListEdit()" type="button" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i>&nbsp;Quitar</button></td>
+			        	<td>{{record.data.baseComponent || (record.precio + record.valor_iva) | currency:"$ "}}</td>
+			        	<td>{{record.isConversion ? record.conversion.unidadText : record.unidadDeMedida}}</td>
+				       	<td><button ng-click="removefromComponentListEdit()" type="button" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i></button></td>
 				        <td></td>
 				      </tr>
-				      <tr ng-show="totalBaseEdit">
+				      <tr class="hidden" ng-show="totalBaseEdit">
 				      	<td colspan="5" class="text-right"><strong>Total Base</strong></td>
 				      	<td colspan="6" class="text-left">{{totalBaseEdit || 0 | currency:"$ "}}</td>
 			      	  </tr>
-			      	  <tr ng-show="totalBaseIvaEdit">
+			      	  <tr class="hidden" ng-show="totalBaseIvaEdit">
 				      	<td colspan="5" class="text-right"><strong>Total Base + Iva</strong></td>
 				      	<td colspan="6" class="text-left">{{totalBaseIvaEdit || 0 | currency:"$ "}}</td>
 			      	  </tr>

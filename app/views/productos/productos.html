@@ -67,15 +67,15 @@
 					        <td>{{record.data.producto}}</td>
 					        <td>{{record._category.text || 'Sin Categoria'}}</td>
 					        <td>{{record.data.precio  | currency:"$ "}}</td>
-					        <td>{{record.data.precio_venta || 0  | currency:"$ "}}</td>
+					        <td>{{record.data.precio_venta || record.data.precio || 0  | currency:"$ "}}</td>
 					        <td>{{record.data.utilidad ? record.data.utilidad   + '%' : '0%'}}</td>
 					        <td>{{record.data.valor_utilidad  || 0 | currency:"$ "}}</td>
 					        <td>{{record.data.valor_iva || 0 | currency:"$ "}}</td>
 					        <td>{{record.data.stockMin || 0}}</td>
 					        <td>{{record.data.stockMax || 0}}</td>
 					        <td><button ng-click="verImpuestos()" type="button" class="btn btn-success btn-xs"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;Ivas</button></td>
-     						<td><button ng-click="edit()" type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-edit"></i>&nbsp;Editar</button></td>
-					        <td><button ng-click="delete()" type="button" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i>&nbsp;Borrar</button></td>
+     						<td><button ng-click="edit()" type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-edit"></i></button></td>
+					        <td><button ng-click="delete()" type="button" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i></button></td>
 					      </tr>
 					    </tbody>
 					  </table>
