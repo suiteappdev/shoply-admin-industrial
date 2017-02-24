@@ -190,7 +190,7 @@
 						<td>{{record.precio || 0  | currency:"$ "}}</td>
 			        	<td>{{(record.precio_venta || record.precio ) || 0  | currency:"$ "}}</td>
 				        <td>
-			        	<input  ng-init="setBaseComponenteEdit(record.data.cantidad)" ng-change="onTypeQtyEditComponent()" type="number" ng-model="record.cantidad" class="form-control input-sm" >				        	
+			        	<input  ng-init="setBaseComponenteEdit()" ng-change="onTypeQtyEditComponent()" type="number" ng-model="record.cantidad" class="form-control input-sm" >				        	
 			        	</td>
 			        	<td>{{record.data.baseComponent || (record.precio + record.valor_iva) | currency:"$ "}}</td>
 			        	<td>{{record.conversion ? record.conversion.unidadText : record.unidadDeMedida}}</td>

@@ -186,6 +186,9 @@ angular.module('shoplyApp')
       if(this.record.conversion){
           this.record.data.baseComponent = (this.record.precio_venta  || this.record.precio) / ((this.record.conversion.areaVolumen)*(this.record.conversion.unidadCantidad)) * angular.copy(this.record.cantidad);
           this.record.data.baseIva = (this.record.precio + this.record.valor_iva) * this.record.data.cantidad; 
+      }else{
+          this.record.data.baseComponent = (this.record.precio_venta  || this.record.precio) * angular.copy(this.record.cantidad);
+          this.record.data.baseIva = (this.record.precio + this.record.valor_iva) * this.record.cantidad; 
       }
     }
 
@@ -194,6 +197,10 @@ angular.module('shoplyApp')
           this.record.cantidad = this.record.data.cantidad; 
           this.record.data.baseComponent = (this.record.precio_venta  || this.record.precio) / ((this.record.conversion.areaVolumen) * (this.record.conversion.unidadCantidad)) * angular.copy(this.record.cantidad);
           this.record.data.baseIva = (this.record.precio + this.record.valor_iva) * this.record.data.cantidad; 
+      }else{
+          this.record.cantidad = this.record.data.cantidad; 
+          this.record.data.baseComponent = (this.record.precio_venta  || this.record.precio) * angular.copy(this.record.cantidad);
+          this.record.data.baseIva = (this.record.precio + this.record.valor_iva) * this.record.cantidad; 
       }
     }
 
@@ -202,8 +209,8 @@ angular.module('shoplyApp')
           this.record.data.baseComponent = (this.record.precio_venta  || this.record.precio) / ((this.record.conversion.areaVolumen) * (this.record.conversion.unidadCantidad)) * angular.copy(this.record.cantidad);
           this.record.data.baseIva = (this.record.precio + this.record.valor_iva) * this.record.data.cantidad; 
       }else{
-          this.record.data.baseComponent = (this.record.precio_venta || this.record.precio * this.record.data.cantidad); 
-          this.record.data.baseIva = (this.record.precio_venta || this.record.precio + this.record.valor_iva) * this.record.data.cantidad;
+          this.record.data.baseComponent = (this.record.precio_venta || this.record.precio * this.record.cantidad); 
+          this.record.data.baseIva = (this.record.precio_venta) * this.record.cantidad;
       }
     }
 
@@ -212,7 +219,7 @@ angular.module('shoplyApp')
           this.record.data.baseComponent = (this.record.precio || this.record.precio_venta ) / (this.record.conversion.areaVolumen) * this.record.cantidad; 
           this.record.data.baseIva = (this.record.precio + this.record.valor_iva) * this.record.cantidad;
       }else{
-          this.record.data.baseComponent = (this.record.precio * this.record.data.cantidad); 
+          this.record.data.baseComponent = (this.record.precio * this.record.cantidad); 
           this.record.data.baseIva = (this.record.precio + this.record.valor_iva) * this.record.cantidad;
       }
     }
@@ -222,8 +229,8 @@ angular.module('shoplyApp')
           this.record.data.baseComponent = (this.record.precio_venta  || this.record.precio) / ((this.record.conversion.areaVolumen) * (this.record.conversion.unidadCantidad)) * angular.copy(this.record.cantidad);
           this.record.data.baseIva = (this.record.precio_venta  ||  this.record.precio + this.record.valor_iva) * this.record.cantidad;
       }else{
-          this.record.data.baseComponent = (this.record.precio_venta || this.record.precio  * this.record.data.cantidad); 
-          this.record.data.baseIva = (this.record.precio_venta  || this.record.precio + this.record.valor_iva) * this.record.cantidad;
+          this.record.data.baseComponent = (this.record.precio_venta || this.record.precio ) * angular.copy(this.record.cantidad); 
+          this.record.data.baseIva = (this.record.precio_venta  || this.record.precio) * angular.copy(this.record.cantidad);
       }
     }
 
@@ -400,6 +407,7 @@ angular.module('shoplyApp')
                 });              
               }else{
                     $scope._productAddObj.data = {};
+                    $scope._productAddObj.conversion = false;
                     $scope._productAddObj.data.cantidad = 1;
                     $scope.recordsProductos.push($scope._productAddObj);
               }
