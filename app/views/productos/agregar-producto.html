@@ -1,4 +1,4 @@
-<div class="inmodal">
+<div class="inmodal" ng-init="loadCreate()">
     <div class="modal-header text-center custom-modal-header">
         <!--<i class="fa fa-sliders color-success h-modal-icon"></i>-->
         <h4 class="modal-title">Agregar Producto</h4>
@@ -326,7 +326,7 @@
 				    </thead>
 				    <tbody>
 	                  <td ng-show="!recordsProductos || recordsProductos.length == 0" colspan="6" style="text-align:center!important;"><i class="glyphicon glyphicon-info-sign"></i>&nbsp;{{'No se han agregado componentes aún;'}}</td>
-				      <tr ng-init="setBaseComponente()"  pagination-id="ProductComponentEntity" dir-paginate="record in recordsProductos |filter:search |itemsPerPage: 5 ">
+				      <tr ng-init="setBaseComponente()" pagination-id="ProductComponentEntity" dir-paginate="record in recordsProductos |filter:search |itemsPerPage: 5 ">
 				        <td>{{record.idcomposed}}</td>
 				        <td>{{record.producto}}</td>
 						<td>{{record.precio || 0  | currency:"$ "}}</td>
@@ -334,8 +334,8 @@
 				        <td>
 			        	<input ng-change="onTypeQty()" type="number" ng-model="record.cantidad" class="form-control input-sm" >				        	
 			        	</td>
-			        	<td>{{record.data.baseComponent || (record.precio + record.valor_iva) | currency:"$ "}}</td>
-			        	<td>{{record.converion ? record.conversion.unidadText : record.unidadDeMedida}}</td>
+			        	<td>{{record.data.baseComponent || record.precio_venta | currency:"$ "}}</td>
+			        	<td>{{record.conversion ? record.conversion.unidadText : record.unidadDeMedida}}</td>
 				       	<td><button ng-click="removefromComponentList()" type="button" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i></button></td>
 				        <td></td>
 				      </tr>

@@ -14,7 +14,8 @@ angular.module('shoplyApp')
     $scope.recordsServices = [];
     
     $scope.unidades = [
-        {"label":"Metros", "value":"M", rel:[{"label":"Centimetros", "value":"CM", numeric : 100}, {"label":"Milimimetros", "value":"MM", numeric:1000}, {"label":"Decimetros", "value":"DC", numeric: 10} ,{"label":"Metros", "value":"M", numeric : 1}]}
+        {"label":"Metros", "value":"M", rel:[{"label":"Centimetros", "value":"CM", numeric : 100}, {"label":"Milimimetros", "value":"MM", numeric:1000}, {"label":"Decimetros", "value":"DC", numeric: 10} ,{"label":"Metros", "value":"M", numeric : 1}]},
+        {"label":"Litros", "value":"L", rel:[{"label":"Centimetros", "value":"CM", numeric : 100}, {"label":"Milimimetros", "value":"MM", numeric:1000}, {"label":"Decimetros", "value":"DC", numeric: 10} ,{"label":"Metros", "value":"M", numeric : 1}]}
     ];
 
     $scope.setUnidadValue = function(){
@@ -44,6 +45,14 @@ angular.module('shoplyApp')
       if(angular.fromJson(storage.get('recentColors'))){
           $scope.recentsColors = angular.fromJson(storage.get('recentColors'));
       }
+
+
+    }
+
+    $scope.loadCreate = function(){
+      if($scope.recordsProductos && $scope.recordsProductos.length > 0){
+        $scope.recordsProductos.length = 0;
+      }   
     }
 
     $scope.conversiones = function(){
@@ -94,7 +103,7 @@ angular.module('shoplyApp')
 
           $scope.setUnidadValueEdit();
           $scope._relEdit = $scope.unidadObjectEdit.rel;
-          $scope.unidadCantidadEdit = $scope.formEdit.data.conversion.unidadCantidad;
+          $scope.unidadCantidadEdit = $scope.formEdit.data.conversion.unidadCantidad || $scope.formEdit.data.cantidad ? $scope.formEdit.data.conversion.unidadCantidad || $scope.formEdit.data.cantidad : null ;
 
           $scope.onSelectRelEdit = function(){
             $scope.unidadCantidadEdit = angular.copy($scope.formEdit.data.cantidad ) * parseInt($scope.unidadSetEdit);
@@ -183,12 +192,9 @@ angular.module('shoplyApp')
     });
 
     $scope.setBaseComponente = function(){
-      if(this.record.conversion){
+      if(this.record && this.record.conversion){
           this.record.data.baseComponent = (this.record.precio_venta  || this.record.precio) / ((this.record.conversion.areaVolumen)*(this.record.conversion.unidadCantidad)) * angular.copy(this.record.cantidad);
           this.record.data.baseIva = (this.record.precio + this.record.valor_iva) * this.record.data.cantidad; 
-      }else{
-          this.record.data.baseComponent = (this.record.precio_venta  || this.record.precio) * angular.copy(this.record.cantidad);
-          this.record.data.baseIva = (this.record.precio + this.record.valor_iva) * this.record.cantidad; 
       }
     }
 
@@ -206,11 +212,13 @@ angular.module('shoplyApp')
 
     $scope.onTypeQty = function(){
       if(this.record.conversion){
+          this.record.cantidad = this.record.cantidad; 
           this.record.data.baseComponent = (this.record.precio_venta  || this.record.precio) / ((this.record.conversion.areaVolumen) * (this.record.conversion.unidadCantidad)) * angular.copy(this.record.cantidad);
           this.record.data.baseIva = (this.record.precio + this.record.valor_iva) * this.record.data.cantidad; 
       }else{
-          this.record.data.baseComponent = (this.record.precio_venta || this.record.precio * this.record.cantidad); 
-          this.record.data.baseIva = (this.record.precio_venta) * this.record.cantidad;
+          this.record.cantidad = this.record.cantidad; 
+          this.record.data.baseComponent = (this.record.precio_venta  || this.record.precio) * angular.copy(this.record.cantidad);
+          this.record.data.baseIva = (this.record.precio + this.record.valor_iva) * this.record.cantidad; 
       }
     }
 
@@ -219,8 +227,8 @@ angular.module('shoplyApp')
           this.record.data.baseComponent = (this.record.precio || this.record.precio_venta ) / (this.record.conversion.areaVolumen) * this.record.cantidad; 
           this.record.data.baseIva = (this.record.precio + this.record.valor_iva) * this.record.cantidad;
       }else{
-          this.record.data.baseComponent = (this.record.precio * this.record.cantidad); 
-          this.record.data.baseIva = (this.record.precio + this.record.valor_iva) * this.record.cantidad;
+          this.record.data.baseComponent = ((this.record.precio_venta || this.record.precio) * this.record.cantidad); 
+          this.record.data.baseIva = (this.record.precio_venta || this.record.precio) * this.record.cantidad;
       }
     }
 
@@ -392,7 +400,7 @@ angular.module('shoplyApp')
                   if(isConfirm){
                       $scope._productAddObj.data = {};
                       $scope._productAddObj.data.cantidad = 1;
-                      $scope._productAddObj.data.baseComponent = ($scope._productAddObj.precio || $scope._productAddObj.precio_venta ) / ($scope._productAddObj.conversion.areaVolumen);
+                      $scope._productAddObj.data.baseComponent = ($scope._productAddObj.precio_venta || $scope._productAddObj.precio) / ($scope._productAddObj.conversion.areaVolumen);
                       $scope._productAddObj.isConversion = true;
                       $scope.recordsProductos.push($scope._productAddObj);
                       $scope.$apply();
@@ -411,15 +419,6 @@ angular.module('shoplyApp')
                     $scope._productAddObj.data.cantidad = 1;
                     $scope.recordsProductos.push($scope._productAddObj);
               }
-
-              $scope.form.data.component = $scope.recordsProductos.map(function(component){
-                return {
-                  _id : component._id,
-                  baseComponent : component.baseComponent,
-                  baseIva : component.baseIva,
-                  cantidad : component.cantidad
-                }
-              }); 
 
               delete $scope._productAdd;
       }
@@ -444,7 +443,7 @@ angular.module('shoplyApp')
                     if(isConfirm){
                           $scope._productAddObjEdit.data = {};
                           $scope._productAddObjEdit.data.cantidad = 1;
-                          $scope._productAddObjEdit.data.baseComponent = ($scope._productAddObjEdit.precio || $scope._productAddObjEdit.precio_venta ) / ($scope._productAddObjEdit.conversion.areaVolumen);
+                          $scope._productAddObjEdit.data.baseComponent = ($scope._productAddObjEdit.precio_venta || $scope._productAddObjEdit.precio ) / ($scope._productAddObjEdit.conversion.areaVolumen);
                           $scope._productAddObjEdit.isConversion = true;
                           
                           if($scope.recordsProductosEdit){
@@ -481,9 +480,17 @@ angular.module('shoplyApp')
                     }
                   });              
                 }else{
-                       $scope._productAddObjEdit.data = {};
-                       $scope._productAddObjEdit.data.cantidad = 1;
-                       $scope.recordsProductosEdit.push($scope._productAddObjEdit);
+
+                      if($scope.recordsProductosEdit){
+                        $scope._productAddObjEdit.data = {};
+                        $scope._productAddObjEdit.data.cantidad = 1;
+                        $scope.recordsProductosEdit.push($scope._productAddObjEdit);
+                      }else{
+                        $scope.recordsProductosEdit = [];
+                        $scope._productAddObjEdit.data = {};
+                        $scope._productAddObjEdit.data.cantidad = 1;
+                        $scope.recordsProductosEdit.push($scope._productAddObjEdit);                        
+                      }
                 }        
       }
 
@@ -805,6 +812,17 @@ angular.module('shoplyApp')
                        modal.incompleteForm();
                       return;
                   }
+
+                  if($scope.recordsProductos && $scope.recordsProductos.length > 0){
+                      $scope.form.data.component = $scope.recordsProductos.map(function(component){
+                        console.log("component iter", component)
+                        return {
+                          _id : component._id,
+                          cantidad : component.cantidad
+                        }
+                      }); 
+                  }
+
 
                   api.producto().post($scope.form).success(function(res){
                       if(res){
