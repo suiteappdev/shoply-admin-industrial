@@ -272,14 +272,14 @@
 			<div class="col-lg-4">
 				<div class="form-group">
 					<label>Unidade de Medida</label>
-					<div class="input-group">
+					<div ng-class="{'input-group': $parent.form.data.unidadDeMedida != 'UND'}" class="form-group">
 						<selectize
 							ng-change="setUnidadValue()" 
 							config="{maxItems:1, placeholder:'Unidad de Medida', labelField:'label', valueField :'value' }" 
 							options='unidades' 
 							ng-model="$parent.form.data.unidadDeMedida">
 						</selectize>
-						<span class="input-group-btn">
+						<span class="input-group-btn" ng-show="$parent.form.data.unidadDeMedida != 'UND'">
 							<button ng-click="conversiones()" class="btn custom-btn-primary" style="top: -3px;padding:4px 12px;!important" type="button">Conversión</button>
 						</span>
 					</div>
@@ -339,13 +339,9 @@
 				       	<td><button ng-click="removefromComponentList()" type="button" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i></button></td>
 				        <td></td>
 				      </tr>
-				      <tr ng-show="totalBase">
-				      	<td colspan="5" class="text-right"><strong>Total Base</strong></td>
+				      <tr>
+				      	<td colspan="5" class="text-right"><strong>Total</strong></td>
 				      	<td colspan="6" class="text-left">{{totalBase || 0 | currency:"$ "}}</td>
-			      	  </tr>
-			      	  <tr ng-show="totalBaseIva">
-				      	<td colspan="5" class="text-right"><strong>Total Base + Iva</strong></td>
-				      	<td colspan="6" class="text-left">{{totalBaseIva || 0 | currency:"$ "}}</td>
 			      	  </tr>
 				    </tbody>
 				  </table>			  		

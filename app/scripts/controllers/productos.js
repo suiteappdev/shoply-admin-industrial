@@ -15,7 +15,8 @@ angular.module('shoplyApp')
     
     $scope.unidades = [
         {"label":"Metros", "value":"M", rel:[{"label":"Centimetros", "value":"CM", numeric : 100}, {"label":"Milimimetros", "value":"MM", numeric:1000}, {"label":"Decimetros", "value":"DC", numeric: 10} ,{"label":"Metros", "value":"M", numeric : 1}]},
-        {"label":"Litros", "value":"L", rel:[{"label":"Centimetros", "value":"CM", numeric : 100}, {"label":"Milimimetros", "value":"MM", numeric:1000}, {"label":"Decimetros", "value":"DC", numeric: 10} ,{"label":"Metros", "value":"M", numeric : 1}]}
+        {"label":"Litros", "value":"L", rel:[{"label":"Centimetros", "value":"CM", numeric : 100}, {"label":"Milimimetros", "value":"MM", numeric:1000}, {"label":"Decimetros", "value":"DC", numeric: 10} ,{"label":"Metros", "value":"M", numeric : 1}]},
+        {"label":"Unidad", "value":"UND", rel:[{"label":"Centimetros", "value":"CM", numeric : 100}, {"label":"Milimimetros", "value":"MM", numeric:1000}, {"label":"Decimetros", "value":"DC", numeric: 10} ,{"label":"Metros", "value":"M", numeric : 1}]}
     ];
 
     $scope.setUnidadValue = function(){
@@ -50,6 +51,7 @@ angular.module('shoplyApp')
     }
 
     $scope.loadCreate = function(){
+      delete $scope.totalBase;
       if($scope.recordsProductos && $scope.recordsProductos.length > 0){
         $scope.recordsProductos.length = 0;
       }   
@@ -247,7 +249,7 @@ angular.module('shoplyApp')
         var total = 0;
 
         for (var i = 0; i < $scope.recordsProductos.length; i++) {
-            _total.push($scope.recordsProductos[i].data.baseComponent || $scope.recordsProductos[i].precio);
+            _total.push($scope.recordsProductos[i].data.baseComponent || $scope.recordsProductos[i].precio_venta || $scope.recordsProductos[i].precio);
         };
 
 
@@ -265,7 +267,7 @@ angular.module('shoplyApp')
         var total = 0;
 
         for (var i = 0; i < $scope.recordsServices.length; i++) {
-            _total.push($scope.recordsServices[i].data.baseComponent || $scope.recordsServices[i].precio);
+            _total.push($scope.recordsProductos[i].data.baseComponent || $scope.recordsProductos[i].precio_venta || $scope.recordsProductos[i].precio);
         };
 
 
@@ -282,7 +284,7 @@ angular.module('shoplyApp')
         var total = 0;
 
         for (var i = 0; i < $scope.recordsProductos.length; i++) {
-            _total.push($scope.recordsProductos[i].data.baseIva || ($scope.recordsProductos[i].precio + $scope.recordsProductos[i].valor_iva) * $scope.recordsProductos[i].data.cantidad || 0);
+            _total.push($scope.recordsProductos[i].data.baseComponent || $scope.recordsProductos[i].precio_venta || $scope.recordsProductos[i].precio);
         };
 
 
@@ -299,7 +301,7 @@ angular.module('shoplyApp')
         var total = 0;
 
         for (var i = 0; i < $scope.recordsProductosEdit.length; i++) {
-            _total.push($scope.recordsProductosEdit[i].data.baseComponent || $scope.recordsProductosEdit[i].precio);
+            _total.push($scope.recordsProductosEdit[i].data.baseComponent || $scope.recordsProductosEdit[i].precio_venta || $scope.recordsProductosEdit[i].precio);
         };
 
 
@@ -357,14 +359,14 @@ angular.module('shoplyApp')
       if(n){
         if(n.length > 0){
             $scope.totalizeBase();
-            $scope.totalizeBaseIva();
+            $scope.totalizeBaseComponentIva();
 
             if($scope.form.precio_venta <= $scope.totalBase){
                 toastr.warning('El costo de este producto esta por debajo del valor total del los materiales');          
             }
         }
       }
-    });
+    }, true);
 
     $scope.$watch('recordsProductosEdit', function(n, o){
       if(n){

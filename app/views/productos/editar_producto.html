@@ -197,13 +197,9 @@
 				       	<td><button ng-click="removefromComponentListEdit()" type="button" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i></button></td>
 				        <td></td>
 				      </tr>
-				      <tr class="hidden" ng-show="totalBaseEdit">
-				      	<td colspan="5" class="text-right"><strong>Total Base</strong></td>
+				      <tr class="" ng-show="totalBaseEdit">
+				      	<td colspan="5" class="text-right"><strong>Total</strong></td>
 				      	<td colspan="6" class="text-left">{{totalBaseEdit || 0 | currency:"$ "}}</td>
-			      	  </tr>
-			      	  <tr class="hidden" ng-show="totalBaseIvaEdit">
-				      	<td colspan="5" class="text-right"><strong>Total Base + Iva</strong></td>
-				      	<td colspan="6" class="text-left">{{totalBaseIvaEdit || 0 | currency:"$ "}}</td>
 			      	  </tr>
 				    </tbody>
 				  </table>			  		
@@ -360,7 +356,7 @@
 				</div>
 			</div>
 			<div class="col-lg-4">
-				<div class="input-group">
+				<div ng-class="{'input-group': $parent.formEdit.data.unidadDeMedida != 'UND'}">
 					<label>Unidade de Medida</label>
 					<selectize 
 						ng-change="setUnidadValueEdit()"
@@ -368,7 +364,7 @@
 						options='unidades' 
 						ng-model="$parent.formEdit.data.unidadDeMedida">
 					</selectize>
-					<span class="input-group-btn" style="top:10px;">
+					<span class="input-group-btn" style="top:10px;" ng-show="$parent.formEdit.data.unidadDeMedida != 'UND'">
 					<button ng-click="conversionesEdit()" class="btn custom-btn-primary" style="top: -3px;padding:4px 12px;!important" type="button">Conversión</button>
 					</span>
 				</div>
