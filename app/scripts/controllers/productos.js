@@ -52,6 +52,12 @@ angular.module('shoplyApp')
 
     $scope.loadCreate = function(){
       delete $scope.totalBase;
+      delete $scope.unidadCantidad;
+      delete $scope.unidadSet;
+      delete $scope.areaVolumen;
+      delete $scope.cantidadTotalUnidades;
+      delete $scope.unidadText;
+
       if($scope.recordsProductos && $scope.recordsProductos.length > 0){
         $scope.recordsProductos.length = 0;
       }   
