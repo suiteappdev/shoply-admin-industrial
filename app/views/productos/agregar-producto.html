@@ -44,11 +44,10 @@
 	        <legend class="text-center" style="font-size:14px!important;margin-bottom:5px;">Caracteristicas</legend>
 	        <div class="col-lg-8">
 		        <div class="form-group">
-		        	<label>Descripcion del color:</label>
+		        	<label>Color:</label>
 					<input type="text" placeholder="Color" required class="form-control input-sm" ng-model="$parent.apariencia.descripcionColor">
 					<a ng-show="recentsColors && recentsColors.length > 0"  href="" ng-click="loadRecent()" class="label label-primary">({{recentsColors.length}}) colores recientes.</a>
 		        </div>
-
 	        </div>
 	        <div class="col-lg-2">
 	        	<label>Color:</label>
@@ -63,12 +62,18 @@
                 <thead>
                   <th>Descripcion</th>
                   <th>Color</th>
+                  <th>Predeterminado</th>
                   <th></th>
                 </thead>
                 <tbody>
                   <tr dir-paginate="color in  $parent.form.data.color | itemsPerPage: 4" pagination-id="colorEntity">
                     <td>{{color.descripcion}}</td>
                     <td><span style="background-color:{{color.color}};" class="label">&nbsp;&nbsp;&nbsp;</span></td>
+                    <td>            
+                    	<label class="text-dark">
+            				<input icheck type="radio" ng-change="setDefaultColor($index)" ng-value="true" name="predeterminado" ng-model="color.predeterminado" class="info-bounce">
+                				
+            			</label></td>
                     <td class="text-right">
                     <a style="width:auto;" ng-click="removeColor()" class="custom-btn-tiny btn-block btn-danger"><i class="glyphicon glyphicon-trash"></i>&nbsp;Quitar</a>
                     </td> 

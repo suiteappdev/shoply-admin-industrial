@@ -146,13 +146,30 @@ angular.module('shoplyApp')
       $scope.form.data.color = $scope.recentsColors;
     }
 
+    $scope.setDefaultColor = function(index) {
+        for (var i=0;i<$scope.form.data.color.length;i++) {
+            if (index != i) {
+                $scope.form.data.color[i].predeterminado = false;
+            }
+        }
+    };
+
+    $scope.setDefaultColorEdit = function(index) {
+        for (var i=0;i<$scope.formEdit.data.color.length;i++) {
+            if (index != i) {
+                $scope.formEdit.data.color[i].predeterminado = false;
+            }
+        }
+    };
+
+
     $scope.addColor = function(){
       if(!$scope.form.data.color){
         $scope.form.data.color = [];
-        $scope.form.data.color.push({descripcion : $scope.apariencia.descripcionColor, color : $scope.apariencia.color});
+        $scope.form.data.color.push({descripcion : $scope.apariencia.descripcionColor, color : $scope.apariencia.color, predeterminado : $scope.apariencia.predeterminado});
         storage.save('recentColors', $scope.form.data.color);
       }else{
-        $scope.form.data.color.push({descripcion : $scope.apariencia.descripcionColor, color : $scope.apariencia.color});
+        $scope.form.data.color.push({descripcion : $scope.apariencia.descripcionColor, color : $scope.apariencia.color, predeterminado : $scope.apariencia.predeterminado});
          storage.save('recentColors', $scope.form.data.color);
       }
 
