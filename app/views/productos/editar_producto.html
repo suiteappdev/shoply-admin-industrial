@@ -279,11 +279,11 @@
 				    </thead>
 				    <tbody>
 	                  <td ng-show="!formEdit.data.services || formEdit.data.services .length == 0" colspan="6" style="text-align:center!important;"><i class="glyphicon glyphicon-info-sign"></i>&nbsp;{{'No se han agregado servicios aún;'}}</td>
-				      <tr pagination-id="ProductServicesEntityEdit" dir-paginate="record in formEdit.data.services  |filter:search |itemsPerPage: 5 ">
+				      <tr ng-init="setBaseService()" pagination-id="ProductServicesEntityEdit" dir-paginate="record in formEdit.data.services  |filter:search |itemsPerPage: 5 ">
 				        <td>{{record.idcomposed}}</td>
 				        <td>{{record.producto}}</td>
 				        <td>
-			        	<input ng-change="onTypeQtyEdit()" type="number"  ng-model="record.data.cantidad" class="form-control input-sm" >				        	
+			        	<input ng-change="onTypeQtyServiceEdit()" type="number"  ng-model="record.cantidad" class="form-control input-sm" >				        	
 			        	</td>
 			        	<td>{{record.unidadDeMedida || 'no definida'}}</td>
 			        	<td>{{record.data.baseComponent || record.precio || 0  | currency:"$ "}}</td>

@@ -186,11 +186,11 @@
 				        <td>{{record.idcomposed}}</td>
 				        <td>{{record.producto}}</td>
 				        <td>
-			        	<input ng-change="onTypeQty()" type="number" ng-init="record.data.cantidad = 1;"  ng-model="record.data.cantidad" class="form-control input-sm" >				        	
+			        	<input ng-change="onTypeQtyService()" type="number" ng-model="record.cantidad" class="form-control input-sm" >				        	
 			        	</td>
 			        	<td>{{record.unidadDeMedida || 'no definida'}}</td>
-			        	<td>{{record.data.baseComponent || record.precio || 0  | currency:"$ "}}</td>
-			        	<td>{{record.data.baseIva || (record.precio + record.valor_iva) || 0  | currency:"$ "}}</td>
+			        	<td>{{record.data.baseComponent || record.precio || record.precio_venta || 0  | currency:"$ "}}</td>
+			        	<td>{{record.data.baseIva || (record.precio || record.precio_venta + record.valor_iva) || 0  | currency:"$ "}}</td>
 				       	<td><button ng-click="removeServicefromComponentList()" type="button" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i>&nbsp;Quitar</button></td>
 				        <td></td>
 				      </tr>

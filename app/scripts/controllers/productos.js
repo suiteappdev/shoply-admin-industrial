@@ -57,6 +57,7 @@ angular.module('shoplyApp')
       delete $scope.areaVolumen;
       delete $scope.cantidadTotalUnidades;
       delete $scope.unidadText;
+      $scope.recordsServices.length = 0;
 
       if($scope.recordsProductos && $scope.recordsProductos.length > 0){
         $scope.recordsProductos.length = 0;
@@ -247,6 +248,12 @@ angular.module('shoplyApp')
       }
     }
 
+    $scope.onTypeQtyService = function(){
+          this.record.cantidad = this.record.cantidad; 
+          this.record.data.baseComponent = (this.record.precio_venta  || this.record.precio) * angular.copy(this.record.cantidad);
+          this.record.data.baseIva = (this.record.precio + this.record.valor_iva) * this.record.cantidad; 
+    }
+
     $scope.onTypeQtyEdit = function(){
       if(this.record.conversion){
           this.record.data.baseComponent = (this.record.precio || this.record.precio_venta ) / (this.record.conversion.areaVolumen) * this.record.cantidad; 
@@ -255,6 +262,11 @@ angular.module('shoplyApp')
           this.record.data.baseComponent = ((this.record.precio_venta || this.record.precio) * this.record.cantidad); 
           this.record.data.baseIva = (this.record.precio_venta || this.record.precio) * this.record.cantidad;
       }
+    }
+
+    $scope.onTypeQtyServiceEdit = function(){
+        this.record.data.baseComponent = ((this.record.precio_venta || this.record.precio) * this.record.cantidad); 
+        this.record.data.baseIva = (this.record.precio_venta || this.record.precio) * this.record.cantidad;
     }
 
     $scope.onTypeQtyEditComponent = function(){
@@ -290,7 +302,7 @@ angular.module('shoplyApp')
         var total = 0;
 
         for (var i = 0; i < $scope.recordsServices.length; i++) {
-            _total.push($scope.recordsProductos[i].data.baseComponent || $scope.recordsProductos[i].precio_venta || $scope.recordsProductos[i].precio);
+            _total.push($scope.recordsServices[i].data.baseComponent || $scope.recordsServices[i].precio_venta || $scope.recordsServices[i].precio);
         };
 
 
@@ -486,7 +498,6 @@ angular.module('shoplyApp')
                              return;
                           }
                     }else{
-                      alert("no")
                       $scope._productAddObjEdit.data = {};
                       $scope._productAddObjEdit.data.cantidad = 1;
                       
@@ -551,12 +562,18 @@ angular.module('shoplyApp')
 
     $scope.$watch('_serviceAdd', function(n, o){
       if(n){
+            $scope._serviceAddObj.data = {};
+            $scope._serviceAddObj.data.cantidad = 1;
+            $scope._serviceAddObj.data.baseComponent = ($scope._serviceAddObj.precio_venta || $scope._serviceAddObj.precio) * ($scope._serviceAddObj.cantidad); 
             $scope.recordsServices.push($scope._serviceAddObj);
+
             $scope.form.data.services = $scope.recordsServices.map(function(services){
               return {
                 _id : services._id
               }
             });
+
+            delete $scope._serviceAdd;
       }
     });
 
@@ -596,6 +613,13 @@ angular.module('shoplyApp')
           }
         });
     }
+
+    $scope.setBaseService = function(){
+      this.record.data.baseComponent = (this.record.precio_venta  || this.record.precio) * (angular.copy(this.record.cantidad));
+      this.record.data.baseIva = (this.record.precio + this.record.valor_iva) * this.record.cantidad; 
+    }
+
+
 
     $scope.detail = function(){
       var url = $state.href('dashboard.detalle_producto', { producto : $rootScope.grid.value._id});
@@ -665,12 +689,9 @@ angular.module('shoplyApp')
       if($scope.formEdit.data.services){
         $scope.formEdit.data.services = $scope.formEdit.data.services.map(function(o){
               var _obj = new Object();
-              console.log("o", o)
               _obj = o._id.data;
-              
               _obj.data = {};
-              _obj.data.cantidad = o.cantidad;
-              
+              _obj.cantidad = o.cantidad;
               _obj.iva = o._id._iva;
               _obj._reference = o._id._reference;
               _obj._category = o._id._category;
@@ -693,7 +714,7 @@ angular.module('shoplyApp')
               form.data.services = angular.copy($scope.formEdit.data.services.map(function(service){
                 return {
                   _id : service._id,
-                  cantidad : service.data.cantidad
+                  cantidad : service.cantidad
                 }
               }));
            }

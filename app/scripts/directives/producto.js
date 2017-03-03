@@ -102,6 +102,7 @@ angular.module('shoplyApp')
           var _obj = new Object();
               _obj = o.data;
               _obj.iva = o._iva;
+              _obj.conversion = o.data.conversion;
               _obj._reference = o._reference;
               _obj._category = o._category;
               _obj._id = o._id;
