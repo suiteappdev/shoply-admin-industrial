@@ -451,6 +451,16 @@ angular
                   pageTitle: 'Ordenes'
                 }
           })
+          .state('dashboard.orden_produccion', {
+                url: '/orden-produccion',
+                access: { requiredAuthentication: true },
+                controller:'ProductionCtrl',
+                templateUrl: 'views/ordenes/orden-produccion.html',
+                params: { requests: null},
+                data: {
+                  pageTitle: 'Orden de Produccion'
+                }
+          })
           .state('dashboard.perfil', {
                 url: '/perfil',
                 access: { requiredAuthentication: true },

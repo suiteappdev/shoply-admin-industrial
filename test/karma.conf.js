@@ -68,6 +68,7 @@ module.exports = function(config) {
       'bower_components/file-saver/FileSaver.js',
       'bower_components/json-export-excel/src/json-export-excel.js',
       'bower_components/angular-i18n/angular-locale_es-co.js',
+      'bower_components/underscore/underscore.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'app/scripts/**/*.js',

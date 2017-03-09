@@ -8,22 +8,18 @@
  * Controller of the shoplyApp
  */
 angular.module('shoplyApp')
-  .controller('RequestCtrl', function ($scope, $window,$timeout, constants, api, $state, modal, $rootScope, $filter) {
+  .controller('ProductionCtrl', function ($scope, $window, $timeout, constants, api, $state, modal, $rootScope, $filter, $stateParams) {
     $scope.request_status = constants.request_status;
     $scope.Records = false;
 
-  $rootScope.$on("incoming_request", function(event, data){
-      $scope.records.push(data);
-  });
-
-  $scope.setFormat = function(){
-    if(!$scope.filter){
-      $scope.filter = {};
-      $scope.filter._ini = $filter('date')($scope.dt, 'yyyy-MM-dd');
-    }else{
-      $scope.filter._ini = $filter('date')($scope.dt, 'yyyy-MM-dd');
+    $scope.setFormat = function(){
+      if(!$scope.filter){
+        $scope.filter = {};
+        $scope.filter._ini = $filter('date')($scope.dt, 'yyyy-MM-dd');
+      }else{
+        $scope.filter._ini = $filter('date')($scope.dt, 'yyyy-MM-dd');
+      }
     }
-  }
 
   $scope.today = function() {
     $scope.dt = new Date();
@@ -98,33 +94,24 @@ angular.module('shoplyApp')
   $scope.data_export = [];
   
    $scope.load = function(){
-      api.pedido().get().success(function(res){
-          $scope.records = res || [];
-          $scope.Records = true;
+    var records = []
+    
+    for (var i = 0; i < $stateParams.requests.length; i++) {
+      for (var y = 0; y < $stateParams.requests[i].shoppingCart.length; y++) {
+          $stateParams.requests[i].shoppingCart[y].pedido = $stateParams.requests[i].id;
+          records.push($stateParams.requests[i].shoppingCart[y]);
+      };
+    };
 
-          for (var i = 0; i < $scope.records.length; i++) {
-              for (var y = 0; y < $scope.records[i].shoppingCart.length; y++) {
-                  var _row = {};
-                  
-                  _row.ref = $scope.records[i].shoppingCart[y].refMixed;
-                  _row.descripcion = $scope.records[i].shoppingCart[y].producto;
-                  _row.unidades = $scope.records[i].shoppingCart[y].cantidad;
-                  _row.dcto = $scope.records[i].data.descuento || 0;
-                  _row.costo =  $scope.records[i].shoppingCart[y].precio || 0;
-                  
-                  _row.precio_venta = $scope.records[i].shoppingCart[y].precio_VentaFacturado || $scope.records[i].shoppingCart[y].precio_Venta || 0                 
-                  _row.valor_iva = $scope.records[i].shoppingCart[y].valor_iva
-                  _row.valor_utilidad = $scope.records[i].shoppingCart[y].valor_utilidad || 0
+    $scope.records = records;
+    $scope.productionList = _.groupBy($scope.records, 'idcomposed');
+   }
 
-                  _row.dcto = $scope.records[i].data.descuento || 0;
-                  _row.numpedido = $scope.records[i].id;
-
-                  $scope.data_export.push(_row);
-              };
-          };
-
-      });
-    }
+   $scope.totalize = function(value){
+    for (var i = 0; i < value.length; i++) {
+        this.totalCantidades = (this.totalCantidades + value[i].cantidad || 0)
+    };
+   }
 
     $scope.generateExport = function(){
       if(this.record && this.record.shoppingCart){
@@ -150,20 +137,6 @@ angular.module('shoplyApp')
           };        
       }
 
-    }
-
-    $scope.ToProductionRequest = function(){
-      $scope.productionRequest = $scope.data.currentPageFiltered.filter(function(request){
-          return request.add
-      });
-
-      $state.go('dashboard.orden_produccion', {requests : $scope.productionRequest || []});
-    }
-
-    $scope.ToSingleProductionRequest = function(){
-      $scope.productionRequest = [this.record];
-
-      $state.go('dashboard.orden_produccion', {requests : $scope.productionRequest || []});
     }
 
     $scope.location = function(){

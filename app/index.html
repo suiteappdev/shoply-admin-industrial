@@ -50,7 +50,7 @@
 
     <div ui-view class="row" style="background-image: url(images/pattern.png);"></div>  
     
-    <div ng-include="'views/home/footer.html'" style="position: absolute;width: 100%;height: 50px;right: 0px;" ng-hide="$root.state.includes('public')" ></div>
+    <div ng-include="'views/home/footer.html'" style="position: relative;width: 100%;height: 50px;right: 0px;" ng-hide="$root.state.includes('public')" ></div>
   </div>
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
      <script>
@@ -113,6 +113,7 @@
     <script src='bower_components/file-saver/FileSaver.js'></script>
     <script src='bower_components/json-export-excel/src/json-export-excel.js'></script>
     <script src='bower_components/angular-i18n/angular-locale_es-co.js'></script>
+    <script src='bower_components/underscore/underscore.js'></script>
     <!-- endbower -->
     <!-- endbuild -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.full.min.js"></script>
@@ -132,6 +133,7 @@
         <script src="scripts/controllers/existencias.js"></script>
         <script src="scripts/services/account.js"></script>
         <script src="scripts/controllers/request.js"></script>
+        <script src="scripts/controllers/production.js"></script>
         <script src="scripts/controllers/location.js"></script>
         <script src="scripts/controllers/employe.js"></script>
         <script src="scripts/controllers/permiso.js"></script>

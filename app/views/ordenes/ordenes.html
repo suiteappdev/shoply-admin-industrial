@@ -22,6 +22,11 @@
           style="margin-bottom:5px;" 
           class="btn custom-btn-primary">
           <i class="fa fa-file-excel-o"></i>&nbsp;Exportar</button>
+        <a 
+          ng-click="ToProductionRequest()"
+          style="margin-bottom:5px;" 
+          class="btn custom-btn-primary">
+          <i class="glyphicon glyphicon-list-alt"></i>&nbsp;Orden de Produccion</a>
         <div class="hpanel">
             <div class="panel-body">
             <div class="row">
@@ -66,13 +71,13 @@
           <table class="table table-hover">
               <thead>
                 <tr>
-                  <th>Codigo</th>
+                  <th></th>
+                  <th>Cod</th>
                   <th>Tipo</th>
                   <th>Vendedor</th>
                   <th>Cliente.</th>
-                  <th>Ciudad.</th>
-                  <th>Barrio</th>
-                  <th>Dir.</th>
+                  <th>Ciudad</th>
+                  <th>Dir</th>
                   <th>Total</th>
                   <th>Fecha</th>
                   <th>Estado</th>
@@ -85,24 +90,28 @@
                 <tr 
                   ng-init="generateExport()"
                   pagination-id="OrdenesEntity"
-                  dir-paginate="record in records
+                  dir-paginate="record in data.currentPageFiltered = (records
                   | dateRange:filter._ini:filter._end 
                   | filter:search 
                   | filter:{_client : { _id : filter._client}} 
                   | filter:{_seller : { _id : filter._seller}} 
                   | filter:{data : { tipo : filter._type}} 
-                  | orderBy:'-createdAt' 
+                  | orderBy:'-createdAt')
+                   
                   | itemsPerPage: 5 ">
+                  <td>
+                    <input ng-init="record.add = true;" icheck type="checkbox"  ng-model="record.add" class="info-bounce">
+                    </label> 
+                  </td>
                   <td>{{record.id}}</td>
                   <td>
-                    <span ng-show="record.data.tipo == 'Orden de Pedido' " class="label label-info">{{record.data.tipo}}</span>
+                    <span ng-show="record.data.tipo == 'Orden de Pedido' " class="label label-info">Pedido</span>
 
-                    <span ng-show="record.data.tipo == 'Remisión'" class="label label-primary">{{record.data.tipo}}</span>
+                    <span ng-show="record.data.tipo == 'Remisión'" class="label label-primary">Remisión</span>
                   </td>
                   <td>{{record._seller.full_name.toLowerCase()}}</td>
                   <td>{{record._client.full_name.toLowerCase() || record._client.data.razon_social.toLowerCase()}}</td>
                   <td>{{record.metadata.ciudad.toLowerCase()}}</td>
-                  <td>{{record.metadata.barrio.toLowerCase()}}</td>
                   <td>{{record.metadata.direccion.toLowerCase()}}</td>
                   <td>{{record.data.total | currency:"$ "}}</td>
                   <td>{{record.createdAt | date:"yyyy-MM-dd"}}</td>
@@ -121,7 +130,7 @@
                     type="button" class="btn custom-btn-primary btn-xs"><i class="fa fa-file-excel-o"></i>
                   </button>
                   </td>
-                  <td><button ng-click="ordenDeProduccion()" type="button" class="btn btn-success btn-xs"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;OP</button></td>
+                  <td><button ng-click="ToSingleProductionRequest()" type="button" class="btn btn-success btn-xs"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;OP</button></td>
                 </tr>
               </tbody>
             </table>
