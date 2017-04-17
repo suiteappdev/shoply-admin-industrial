@@ -89,23 +89,23 @@ padding: 10px;">
                                     <td>{{record.idcomposed}}</td>
     								<td>{{record.producto}}</td>
                                     <td>{{record.cantidad}}</td>
-    								<td>{{(record.precio + record.valor_utilidad) | currency :"$ "}}</td>
-                                    <td>{{record._iva.data.valor}}</td>
+    								<td>{{(record.precio + record.valor_utilidad) || 0 | currency :"$ "}}</td>
+                                    <td>{{record._iva.data.valor || 0}}</td>
                                     <td>{{record.porcentajeDTO || 0}}</td>
-                                    <td>{{record.vlUnicoD | currency :"$ "}}</td>
-    								<td class="text-right">{{record.precio_VentaFacturado | currency :"$ "}}</td>
+                                    <td>{{record.vlUnicoD || 0 | currency :"$ "}}</td>
+    								<td class="text-right">{{record.precio_VentaFacturado || 0 | currency :"$ "}}</td>
     							</tr>
     							<tr>
     								<td class="thick-line"></td>
     								<td class="thick-line"></td>
     								<td colspan="4" class="thick-line text-right"><strong>Subtotal</strong></td>
-    								<td colspan="2" class="thick-line text-right">{{record.data.subtotal | currency: "$ "}}</td>
+    								<td colspan="2" class="thick-line text-right">{{record.data.subtotal ||0 | currency: "$ "}}</td>
     							</tr>
                                 <tr>
                                     <td class="thick-line"></td>
                                     <td class="thick-line"></td>
                                     <td colspan="4" class="thick-line text-right"><strong>Iva</strong></td>
-                                    <td colspan="2" class="thick-line text-right">{{record.data.TotalIva | currency: "$ "}}</td>
+                                    <td colspan="2" class="thick-line text-right">{{record.data.TotalIva || 0 | currency: "$ "}}</td>
                                 </tr>
                                 <tr>
                                     <td class="thick-line"></td>
@@ -123,13 +123,13 @@ padding: 10px;">
                                     <td class="thick-line"></td>
                                     <td class="thick-line"></td>
                                     <td colspan="4" class="thick-line text-right"><strong>Total</strong></td>
-                                    <td colspan="2" class="thick-line text-right">{{record.data.total | currency: "$ "}}</td>
+                                    <td colspan="2" class="thick-line text-right">{{record.data.total || 0 | currency: "$ "}}</td>
                                 </tr>
     							<tr ng-repeat="iva in record.metadata.ivadetails | orderBy:'-tipo'">
     								<td class="no-line"></td>
     								<td class="no-line"></td>
     								<td class="no-line text-center"><strong>Iva del {{iva.tipo || 0}}%</strong></td>
-    								<td class="no-line text-right">{{iva.viva | currency: "$ "}}</td>
+    								<td class="no-line text-right">{{iva.viva ||0 | currency: "$ "}}</td>
     							</tr> 
     						</tbody>
     					</table>

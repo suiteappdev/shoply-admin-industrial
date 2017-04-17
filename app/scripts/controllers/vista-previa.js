@@ -8,7 +8,7 @@
  * Controller of the shoplyApp
  */
 angular.module('shoplyApp')
-  .controller('ProductionCtrl', function ($scope, $window, $timeout, constants, api, $state, modal, $rootScope, $filter, $stateParams) {
+  .controller('VistaPreviaCtrl', function ($scope, $window, $timeout, constants, api, $state, modal, $rootScope, $filter, $stateParams, $location) {
     $scope.request_status = constants.request_status;
     $scope.Records = false;
 
@@ -94,17 +94,28 @@ angular.module('shoplyApp')
   $scope.data_export = [];
   
    $scope.load = function(){
+    if(!$stateParams.requests || $stateParams.requests == 0){
+      $location.url("dashboard/ordenes") ;
+      return;
+    }
+
     var records = []
     
     for (var i = 0; i < $stateParams.requests.length; i++) {
       for (var y = 0; y < $stateParams.requests[i].shoppingCart.length; y++) {
           $stateParams.requests[i].shoppingCart[y].pedido = $stateParams.requests[i].id;
+          $stateParams.requests[i].shoppingCart[y]._client = $stateParams.requests[i]._client || null;
+          $stateParams.requests[i].shoppingCart[y]._seller = $stateParams.requests[i]._seller || null;
+          $stateParams.requests[i].shoppingCart[y].createdAt = $stateParams.requests[i].createdAt || null;
+          $stateParams.requests[i].shoppingCart[y].updatedAt = $stateParams.requests[i].updatedAt || null;
+
           records.push($stateParams.requests[i].shoppingCart[y]);
       };
     };
 
+    console.log("todos", records);
     $scope.records = records;
-    $scope.productionList = _.groupBy($scope.records, 'idcomposed');
+    //$scope.productionList = _.groupBy($scope.records, 'idcomposed');
    }
 
    $scope.totalize = function(value){
@@ -167,6 +178,30 @@ angular.module('shoplyApp')
 
     $scope.detail = function(){
       $state.go('dashboard.detalle_pedido', {pedido: this.record._id});
+    }
+
+    $scope.ToProduction = function(){
+      $scope.productionItem = this.record;
+      
+      $scope.getNextId = function(){
+        api.producciones().add("nextId").get().success(function(res){
+          if(res){
+              $scope.form.data.produccion = res.nextId;
+          }
+        });
+      }
+
+      modal.show({templateUrl : 'views/produccion/agregarProduccion.html', size :'md', scope : $scope, backdrop:'static'}, function($scope){
+        $scope.$close();
+      });
+       //$state.go('dashboard.production', { productos : $scope.records});
+    }
+
+    $scope.MostrarTallasCantidades = function(){
+      $scope.set = this.record;
+      modal.show({templateUrl : 'views/ordenes/TallasCantidades.html', size :'md', scope : $scope, backdrop:'static'}, function($scope){
+        $scope.$close();
+      });
     }
   
   $scope.myConfig = {

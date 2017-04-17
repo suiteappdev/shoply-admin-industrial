@@ -157,13 +157,13 @@ angular.module('shoplyApp')
           return request.add
       });
 
-      $state.go('dashboard.orden_produccion', {requests : $scope.productionRequest || []});
+      $state.go('dashboard.vista-previa', {requests : $scope.productionRequest || []});
     }
 
     $scope.ToSingleProductionRequest = function(){
       $scope.productionRequest = [this.record];
 
-      $state.go('dashboard.orden_produccion', {requests : $scope.productionRequest || []});
+      $state.go('dashboard.vista-previa', {requests : $scope.productionRequest || []});
     }
 
     $scope.location = function(){

@@ -294,6 +294,15 @@ angular
                   pageTitle: 'Productos'
                 }
           })
+          .state('dashboard.production', {
+                url: '/production',
+                access: { requiredAuthentication: true },
+                controller : 'ProduccionCtrl',
+                templateUrl: 'views/produccion/producciones.html',
+                data: {
+                  pageTitle: 'Ordenes de Producción'
+                }
+          })
           .state('dashboard.facturacion', {
                 url: '/facturacion',
                 access: { requiredAuthentication: true },
@@ -451,14 +460,14 @@ angular
                   pageTitle: 'Ordenes'
                 }
           })
-          .state('dashboard.orden_produccion', {
-                url: '/orden-produccion',
+          .state('dashboard.vista-previa', {
+                url: '/vista-previa',
                 access: { requiredAuthentication: true },
-                controller:'ProductionCtrl',
-                templateUrl: 'views/ordenes/orden-produccion.html',
+                controller:'VistaPreviaCtrl',
+                templateUrl: 'views/ordenes/vista-previa.html',
                 params: { requests: null},
                 data: {
-                  pageTitle: 'Orden de Produccion'
+                  pageTitle: 'Vista Previa'
                 }
           })
           .state('dashboard.perfil', {
