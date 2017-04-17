@@ -118,6 +118,12 @@ angular.module('shoplyApp')
     //$scope.productionList = _.groupBy($scope.records, 'idcomposed');
    }
 
+   $scope.$watch('_product', function(n, o){
+    if(o && !n){
+       delete $scope._productObj;
+    }
+   });
+
    $scope.totalize = function(value){
     for (var i = 0; i < value.length; i++) {
         this.totalCantidades = (this.totalCantidades + value[i].cantidad || 0)

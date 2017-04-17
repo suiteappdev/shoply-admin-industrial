@@ -82,14 +82,14 @@
                   </thead>
                   <tbody>
                     <tr 
-                    dir-paginate="record in records  
+                    dir-paginate="record in results = (records  
                       | dateRange:filter._ini:filter._end 
                       | filter:search 
                       | filter:{_client : { _id : filter._client}} 
                       | filter:{_seller : { _id : filter._seller}} 
-                      | filter:{ idcomposed : setObject.idcomposed } 
+                      | filter:{ idcomposed : _productObj.idcomposed } 
                       | orderBy:'-createdAt'
-                      | itemsPerPage: 5 " 
+                      | itemsPerPage: 5 )" 
                     pagination-id="previewEntity">
                       <td><span class="label label-success">{{record.pedido}}</span></td>
                       <td><span class="label label-primary">{{record.idcomposed}}</span></td>
@@ -104,7 +104,7 @@
                     </tr>
                       <tr >
                         <td colspan="8" class="text-right"><strong>Numero de items:</strong></td>
-                        <td colspan="2" class="text-left">{{records.length || 0}}</td>
+                        <td colspan="2" class="text-left">{{results.length || 0}}</td>
                       </tr>
                   </tbody>
                 </table>
