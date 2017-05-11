@@ -42,6 +42,7 @@ angular.module('shoplyApp')
     this.transportador = function(transportador){if(transportador) this.url = constants.base_url + "transportador/" + transportador; else this.url = constants.base_url + "transportador/"; return this;};
     this.categoria = function(categoria){if(categoria) this.url = constants.base_url + "categoria/" + categoria; else this.url = constants.base_url + "categoria/"; return this;};
     this.producciones = function(produccion){if(produccion) this.url = constants.base_url + "producciones/" + produccion; else this.url = constants.base_url + "producciones/"; return this;};
+    this.lotes = function(lote){if(lote) this.url = constants.base_url + "lotes/" + lote; else this.url = constants.base_url + "lotes/"; return this;};
     this.empresa = function(empresa){if(empresa) this.url = constants.base_url + "empresa/" + empresa; else this.url = constants.base_url + "empresa/"; return this;};
     this.arqueos = function(arqueo){if(arqueo) this.url = constants.base_url + "arqueos/" + arqueo; else this.url = constants.base_url + "arqueos/"; return this;};
     this.apps = function(app){if(app) this.url = constants.base_url + "apps/" + app; else this.url = constants.base_url + "apps/"; return this;};

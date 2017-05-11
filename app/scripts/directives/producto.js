@@ -41,7 +41,7 @@ angular.module('shoplyApp')
         maxOptions : 1,
         openOnFocus : false,
         selectOnTab : true,
-        setFocus : $scope.setFocus,
+        setFocus : $scope.setFocus || false,
         render: {
               option: function(item, escape) {
                   if(item.gallery && item.gallery.length > 0){
@@ -87,7 +87,7 @@ angular.module('shoplyApp')
           }
         });
         
-        element[0].firstChild.selectize.focus();
+        //element[0].firstChild.selectize.focus();
       }
     };
   });

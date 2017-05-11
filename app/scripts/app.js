@@ -470,6 +470,16 @@ angular
                   pageTitle: 'Vista Previa'
                 }
           })
+          .state('dashboard.lotes', {
+                url: '/lotes',
+                access: { requiredAuthentication: true },
+                controller:'LotesCtrl',
+                templateUrl: 'views/lotes/lotes.html',
+                params: { requests: null},
+                data: {
+                  pageTitle: 'Lotes'
+                }
+          })
           .state('dashboard.perfil', {
                 url: '/perfil',
                 access: { requiredAuthentication: true },

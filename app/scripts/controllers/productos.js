@@ -889,6 +889,8 @@ angular.module('shoplyApp')
                   });
               });            
           }
+
+           $scope.$apply();
       });
 
     }

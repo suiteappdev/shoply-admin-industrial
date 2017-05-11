@@ -73,7 +73,7 @@
                             |itemsPerPage: 5 " 
                             pagination-id="bodegaEntity">
                             <td>{{record.data.bodega}}</td>
-                            <td>{{record._responsible.full_name}}</td>
+                            <td>{{record._responsible.full_name || 'No Definido'}}</td>
                             <td>{{record.data.departamento}}</td>
                             <td>{{record.data.ciudad.toLowerCase()}}</td>
                             <td>{{record.data.direccion}}</td>

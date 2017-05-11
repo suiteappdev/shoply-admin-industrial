@@ -23,7 +23,8 @@ angular.module('shoplyApp')
   		  placeholder: 'Cliente',
         openOnFocus : false,
         selectOnTab : true,
-        maxItems: 1
+        maxItems: 1,
+        setFocus : $scope.setFocus || false
   		};
 
   	}
@@ -35,11 +36,16 @@ angular.module('shoplyApp')
       	ngModel : "=ngModel",
         key : "@",
         label : "@",
-        data:"=data"
+        data:"=data",
+        setFocus : "="
       },
       controller :ctrl,
       link: function postLink(scope, element, attrs) {
-
+        scope.$root.$on('focusOn', function(evt, data){
+          if(data){
+            element[0].firstChild.selectize.focus();
+          }
+        });
       }
     };
   });
