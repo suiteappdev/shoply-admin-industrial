@@ -22,7 +22,8 @@
           style="margin-bottom:5px;" 
           class="btn custom-btn-primary">
           <i class="fa fa-file-excel-o"></i>&nbsp;Exportar</button>
-        <a 
+        <a
+          ng-show="LoteRecords.length > 0" 
           ng-click="ToProductionRequest()"
           style="margin-bottom:5px;" 
           class="btn custom-btn-primary">
@@ -100,7 +101,7 @@
                    
                   | itemsPerPage: 5 ">
                   <td>
-                    <input ng-init="record.add = true;" icheck type="checkbox"  ng-model="record.add" class="info-bounce">
+                    <input icheck type="checkbox" ng-change="validateLote()" ng-model="record.add" class="info-bounce">
                     </label> 
                   </td>
                   <td>{{record.id}}</td>
@@ -134,6 +135,7 @@
                 </tr>
               </tbody>
             </table>
+                <p>Total Productos Selecionados : &nbsp;<span class="label label-info">{{LoteRecords.length || 0}}</span></p>
                 </div>
                 <div class="col-lg-12">
                   <dir-pagination-controls class="pull-right" pagination-id="OrdenesEntity"></dir-pagination-controls>

@@ -30,14 +30,15 @@ angular.module('shoplyApp')
   	}
 
     return {
-      template: '<selectize focus-on="true" config="myConfig" options="records" ng-model="ngModel"></selectize>',
+      template: '<selectize ng-disabled="disabled" focus-on="true" config="myConfig" options="records" ng-model="ngModel"></selectize>',
       restrict: 'EA',
       scope : {
       	ngModel : "=ngModel",
         key : "@",
         label : "@",
         data:"=data",
-        setFocus : "="
+        setFocus : "=",
+        disabled:"="
       },
       controller :ctrl,
       link: function postLink(scope, element, attrs) {

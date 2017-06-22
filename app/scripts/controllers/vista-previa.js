@@ -116,6 +116,7 @@ angular.module('shoplyApp')
     console.log("todos", records);
     $scope.records = records;
     //$scope.productionList = _.groupBy($scope.records, 'idcomposed');
+    $scope.loteTotal = $stateParams.loteTotal || 0;
    }
 
    $scope.$watch('_product', function(n, o){

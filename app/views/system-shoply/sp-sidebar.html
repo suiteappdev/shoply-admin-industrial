@@ -48,6 +48,9 @@
                     <li ng-show="$root.acl.canView('mnuLotes')" >
                         <a ui-sref="dashboard.lotes" href="#!/lotes"><i class="glyphicon glyphicon-paste"></i> <span class="nav-label">Lotes</span> </a>
                     </li>
+                    <li ng-show="$root.acl.canView('mnuProduction')" >
+                        <a ui-sref="dashboard.production" href="#!/production"><i class="glyphicon glyphicon-paste"></i> <span class="nav-label">Producciones</span> </a>
+                    </li>
                     <li ng-show="$root.acl.canView('mnuFacturacion')" >
                         <a hotkey="{'f2': go}"><i class="fa fa-credit-card"></i> <span class="nav-label">Facturación </span><span class="label label-warning pull-right">F2</span></a>
                         <ul class="nav nav-second-level collapse">

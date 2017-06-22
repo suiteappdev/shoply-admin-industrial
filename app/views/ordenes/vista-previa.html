@@ -13,7 +13,7 @@
   </div>
 <div class="col-lg-12 content" ng-show="records.length > 0">
         <a 
-          ui-sref="dashboard.lotes({ requests : records })" 
+          ui-sref="dashboard.lotes({ requests : records, loteTotal:loteTotal })" 
           href="#!/lotes"
           style="margin-bottom:5px;" 
           class="btn custom-btn-primary">

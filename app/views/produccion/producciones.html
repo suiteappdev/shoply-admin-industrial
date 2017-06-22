@@ -27,8 +27,11 @@
 					<table class="table table-hover">
 					    <thead>
 					      <tr>
-					        <th>Numero de Orden</th>
-					        <th>Lotes de Producción</th>
+					        <th>Lote</th>
+					        <th>Lote Total de productos</th>
+					        <th>Fecha de Produccion</th>
+					        <th>Productos Procesados</th>
+					        <th>Productos Excluidos</th>
 					        <th style="width: 36px;"></th>
 					        <th style="width: 36px;"></th>
 					        <th style="width: 36px;"></th>
@@ -40,11 +43,13 @@
 						      filter:search | 
 						      itemsPerPage: 5 " 
 					      pagination-id="productionEntity">
-					        <td><span class="label label-primary">{{record.id}}</span></td>
-					        <td>{{record.data.producto}}</td>
-					        <td><button ng-click="verImpuestos()" type="button" class="btn btn-success btn-xs"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;Ivas</button></td>
-     						<td><button ng-click="edit()" type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-edit"></i></button></td>
-					        <td><button ng-click="delete()" type="button" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i></button></td>
+					        <td><span class="label label-primary">{{record.data.lote.idcomposed || record.data.lote.id}}</span></td>
+					        <td>{{record.data.loteTotal || 0}}</td>
+					        <td>{{record.createdAt | date:"yyyy-MM-dd"}}</td>
+					        <td ng-init="getProduced()">{{record.produced || 0}}</td>
+					        <td ng-init="getExcluded()">{{record.excluded || 0}}</td>
+					        <td><button ng-click="productionReport()" type="button" class="btn btn-success btn-xs"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;Reporte de producción</button></td>
+					        <td><button ng-click="borrar()" type="button" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i></button></td>
 					      </tr>
 					    </tbody>
 					  </table>

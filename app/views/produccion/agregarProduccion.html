@@ -5,31 +5,38 @@
     </div>
   	<div class="modal-body">
     <div class="row">
-        <div class="col-lg-4">
+        <div class="col-lg-3">
           <div class="form-group">
-              <label for="name" >Cantidad total a producir:</label>
-              <input type="number"  required class="form-control input-sm" placeholder="Digite el total de productos de esta orden" name="lotes" ng-model="formProduction.data.cantidadTotal">
-              <span class="form-input-message">{{'numero de productos que se procesara en la orden de producción'}}.</span>
+              <label for="name" >Cantidad Total a Producir:</label>
+              <input type="number"  required class="form-control input-sm" placeholder="Digite el total de productos de esta orden" name="lotes" ng-model="formProduction.data.loteTotal">
          </div>
         </div>
-        <div class="col-lg-4">
+        <div class="col-lg-3">
           <div class="form-group">
               <label for="name" >Lote:</label>
-              <input type="text"  required class="form-control input-sm" placeholder="Lote de producción" name="lotes" ng-model="formProduction.data.lote.idcomposed">
+              <input type="text"  required class="form-control input-sm" placeholder="Lote de producción" name="lotes" ng-model="formProduction.data.lote.idcomposed" disabled="true">
               <span class="form-input-message">{{formProduction.data.lote.data.observacion || 'Observación no definida'}}.</span>
          </div>
         </div> 
-        <div class="col-lg-4">
+        <div class="col-lg-3">
           <div class="form-group"> 
-               <label>Fecha de Registro</label>
-               <h4 style="margin-top: 5px;">{{ productionDate | date:"yyyy-MM-dd"}}</h4>
+               <label>Observación</label>
+               <pre>{{formProduction.data.observacion || 'sin observaciones'}}</pre>
+          </div>       
+        </div>
+        <div class="col-lg-3">
+          <div class="form-group" ng-show="formProduction.data.cantidadTotal"> 
+               <label>Pares a Producir</label>
+               <h4 style="margin-top: 5px;">{{formProduction.data.cantidadTotal}}</h4>
           </div>       
         </div>
         <div class="col-lg-12">
             <table class="table table-hover">
                 <thead>
                   <tr>
-                    <th>Cliente</th>
+                    <th></th>
+                    <th>Pedido</th>
+                    <th><a ng-click="az = !az" href=""><i class="fa" ng-class="{ 'fa-sort-alpha-asc': az, 'fa-sort-alpha-desc': !az }" aria-hidden="true"></i>&nbsp;Cliente</a></th>
                     <th>Referencia</th>
                     <th>Materiales</th>
                     <th>Color</th>
@@ -39,13 +46,18 @@
                   </tr>
                 </thead>
                 <tbody>
-                <tr dir-paginate="record in formProduction.data.lote.data.request | 
+                <tr dir-paginate="record in $parent.data.currentPageFiltered = (formProduction.data.lote.data.request) | orderBy:sortBy:az ?   
                     filter:search | 
-                    itemsPerPage: 5 " 
+                    itemsPerPage: 5" 
                   pagination-id="productionRequestEntity">
+                  <td>
+                    <input icheck type="checkbox" ng-change="validateLote()" ng-model="record.add" class="info-bounce">
+                    </label> 
+                  </td>
+                  <td>{{record.pedido}}</td>
                   <td style="width:200px;">
                     <div class="form-group">
-                      <cliente-field empty-option="true" placeholder="Vendedor"  ng-model="record._client._id" key="_id" label="full_name"><cliente-field>
+                      <cliente-field disabled="true" empty-option="true" placeholder="Vendedor"  ng-model="record._client._id" key="_id" label="full_name"><cliente-field>
                     </div>
                   </td>
                   <td style="width:200px;">
@@ -69,7 +81,7 @@
                       <button style="padding:5px;" ng-click="MostrarTallasCantidades(true)" type="button" class="btn btn-success btn-xs"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;Cantidades</button>
                   </td>
                   <td>SARAY</td>
-                  <td>10</td>
+                  <td ng-init="summary()">{{record.totalTallas || 0}}</td>
                   <td></td>
                 </tr>
                 </tbody>

@@ -45,7 +45,7 @@
                           <td dir-paginate="cantidad in set.data.tallas | 
                           filter:search | 
                           itemsPerPage: 30 " >
-                          <input type="number" ng-show="allowWrite" required class="form-control input-sm" placeholder="" ng-model="cantidad.cantidad">
+                          <input ng-change="nuevasCantidades()" type="number" ng-show="allowWrite" required class="form-control input-sm" placeholder="" ng-model="cantidad.cantidad">
                           <p ng-show="!allowWrite">{{cantidad.cantidad || 0}}</p></td>
                           <td></td>
                         </tr>

@@ -465,7 +465,7 @@ angular
                 access: { requiredAuthentication: true },
                 controller:'VistaPreviaCtrl',
                 templateUrl: 'views/ordenes/vista-previa.html',
-                params: { requests: null},
+                params: { requests: null, loteTotal:null},
                 data: {
                   pageTitle: 'Vista Previa'
                 }
@@ -475,7 +475,7 @@ angular
                 access: { requiredAuthentication: true },
                 controller:'LotesCtrl',
                 templateUrl: 'views/lotes/lotes.html',
-                params: { requests: null},
+                params: { requests: null, loteTotal : null},
                 data: {
                   pageTitle: 'Lotes'
                 }

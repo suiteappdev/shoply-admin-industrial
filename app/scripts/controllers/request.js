@@ -8,7 +8,7 @@
  * Controller of the shoplyApp
  */
 angular.module('shoplyApp')
-  .controller('RequestCtrl', function ($scope, $window,$timeout, constants, api, $state, modal, $rootScope, $filter) {
+  .controller('RequestCtrl', function ($scope, $window, $timeout, constants, api, $state, modal, $rootScope, $filter, sweetAlert) {
     $scope.request_status = constants.request_status;
     $scope.Records = false;
 
@@ -152,23 +152,75 @@ angular.module('shoplyApp')
 
     }
 
+    $scope.validateLote = function(){
+      $scope.productionRequest = $scope.data.currentPageFiltered.filter(function(request){
+          return request.add
+      });
+
+      $scope.LoteRecords = []
+      
+      for (var i = 0; i < $scope.productionRequest.length; i++) {
+        for (var y = 0; y < $scope.productionRequest[i].shoppingCart.length; y++) {
+            $scope.productionRequest[i].shoppingCart[y].pedido = $scope.productionRequest[i].id;
+            $scope.productionRequest[i].shoppingCart[y]._client = $scope.productionRequest[i]._client || null;
+            $scope.productionRequest[i].shoppingCart[y]._seller = $scope.productionRequest[i]._seller || null;
+            $scope.productionRequest[i].shoppingCart[y].createdAt = $scope.productionRequest[i].createdAt || null;
+            $scope.productionRequest[i].shoppingCart[y].updatedAt = $scope.productionRequest[i].updatedAt || null;
+
+        $scope.LoteRecords.push($scope.productionRequest[i].shoppingCart[y]);
+        };
+      };
+
+      if($scope.LoteRecords.length > $scope.loteTotal){
+          toastr.warning('Has Sobrepasado el lote total de productos!' , {timeOut: 10000});
+      }
+    }
+
+    $scope.addLote = function(){
+      sweetAlert.swal({
+        title: "NUEVO LOTE",
+        text: "Escriba la cantidad del lote:",
+        type: "input",
+        showCancelButton: true,
+        closeOnConfirm: false,
+        animation: "slide-from-top",
+        inputPlaceholder: "Cantidad"
+      },
+      function(inputValue){
+        if (inputValue === false) return false;
+        
+        if (inputValue === "") {
+          swal.showInputError("Necesitas escribir la cantidad del lote");
+          return false
+        }
+
+        $scope.loteTotal = parseInt(inputValue || 0);
+
+        if($scope.LoteRecords && $scope.LoteRecords.length > $scope.loteTotal  ){
+            sweetAlert.swal("Oops...", "Las ordenes seleccionadas sobre pasan el numero de lote!", "error");
+        }
+        
+        $window.sweetAlert.close();
+
+      });
+    }
+
     $scope.ToProductionRequest = function(){
       $scope.productionRequest = $scope.data.currentPageFiltered.filter(function(request){
           return request.add
       });
 
-      $state.go('dashboard.vista-previa', {requests : $scope.productionRequest || []});
+      $state.go('dashboard.vista-previa', {requests : $scope.productionRequest , loteTotal:$scope.loteTotal || 0 || []});
     }
 
     $scope.ToSingleProductionRequest = function(){
       $scope.productionRequest = [this.record];
-
-      $state.go('dashboard.vista-previa', {requests : $scope.productionRequest || []});
+      $state.go('dashboard.vista-previa', {requests : $scope.productionRequest || [], loteTotal:$scope.loteTotal });
     }
 
     $scope.location = function(){
         if(!this.record.data.geo){
-              sweetAlert("Ups", "Coordenadas no disponibles", "warning");
+              sweetAlert.swal("Ups", "Coordenadas no disponibles", "warning");
             return;
         }
 
@@ -185,7 +237,7 @@ angular.module('shoplyApp')
             function(isConfirm){ 
                if (isConfirm) {
             api.pedido(_record._id).delete().success(function(res){
-                  sweetAlert("Correcto", "Se ha eliminado este registro", "success");
+                  sweetAlert.swal("Correcto", "Se ha eliminado este registro", "success");
                         $scope.records.splice($scope.records.indexOf(_record), 1);
             });
                }
