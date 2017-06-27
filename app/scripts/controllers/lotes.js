@@ -162,10 +162,13 @@ angular.module('shoplyApp')
     }
 
     $scope.validateLote = function(){
+
       if(!$scope.formProduction.data.loteTotal){
         toastr.error('Digite el lote total de productos!' , {timeOut: 10000});
         return;
       }
+
+      $scope.totalTallas  = 0;
 
       $scope.productionRequest = $scope.data.currentPageFiltered.filter(function(request){
           return request.add
@@ -174,10 +177,11 @@ angular.module('shoplyApp')
       $scope.LoteRecords = []
       
       for (var i = 0; i < $scope.productionRequest.length; i++) {
+            $scope.totalTallas =  ($scope.totalTallas + $scope.productionRequest[i].totalTallas || 0);
             $scope.LoteRecords.push($scope.productionRequest[i]);
       };
       
-      if($scope.LoteRecords.length > $scope.formProduction.data.loteTotal){
+      if($scope.totalTallas > $scope.formProduction.data.loteTotal){
           toastr.warning('Has Sobrepasado el lote total de productos!' , {timeOut: 10000});
       }
     }

@@ -93,7 +93,7 @@ padding: 10px;">
                                     <td>{{record._iva.data.valor || 0}}</td>
                                     <td>{{record.porcentajeDTO || 0}}</td>
                                     <td>{{record.vlUnicoD || 0 | currency :"$ "}}</td>
-    								<td class="text-right">{{record.precio_VentaFacturado || 0 | currency :"$ "}}</td>
+    								<td class="text-right">{{record.vlUnicoP || record.precio_venta || 0 | currency :"$ "}}</td>
     							</tr>
     							<tr>
     								<td class="thick-line"></td>
