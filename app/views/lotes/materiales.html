@@ -15,6 +15,7 @@
 				        <th>Base</th>
 				        <th>Base + Iva</th>
 				        <th>Cantidad</th>
+				        <th>Material Total</th>
 				        <th>Unidad</th>
 				        <th></th>
 				      </tr>
@@ -29,6 +30,9 @@
 				        <td>
 			        	<input ng-change="onTypeQty()" type="number" ng-model="record.cantidad" class="form-control input-sm" >				        	
 			        	</td>
+			        	
+			        	<td ng-init="materialSummary()">{{record.materialTotal}}</td>
+
 			        	<td>{{record._id.data.conversion ? record._id.data.conversion.unidadText : record._id.data.unidadDeMedida}}</td>
 				        <td></td>
 				      </tr>

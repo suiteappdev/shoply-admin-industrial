@@ -39,14 +39,13 @@
                     <th><a ng-click="az = !az" href=""><i class="fa" ng-class="{ 'fa-sort-alpha-asc': az, 'fa-sort-alpha-desc': !az }" aria-hidden="true"></i>&nbsp;Cliente</a></th>
                     <th>Referencia</th>
                     <th>Materiales</th>
-                    <th>Color</th>
                     <th>Cantidades</th>
                     <th>Marca</th>
                     <th>Total</th>
                   </tr>
                 </thead>
                 <tbody>
-                <tr dir-paginate="record in $parent.data.currentPageFiltered = (formProduction.data.lote.data.request) | orderBy:sortBy:az ?   
+                <tr ng-init="totalMateriales()" dir-paginate="record in $parent.data.currentPageFiltered = (formProduction.data.lote.data.request) | orderBy:sortBy:az ?   
                     filter:search | 
                     itemsPerPage: 5" 
                   pagination-id="productionRequestEntity">
@@ -76,7 +75,6 @@
                   <td>
                     <button style="padding:5px;" ng-click="MostrarMateriales()" type="button" class="btn btn-success btn-xs"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;Materiales</button>
                   </td>
-                  <td>{{record.data.colorRequest.descripcion || 'no definido'}}</td>
                   <td>
                       <button style="padding:5px;" ng-click="MostrarTallasCantidades(true)" type="button" class="btn btn-success btn-xs"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;Cantidades</button>
                   </td>

@@ -30,8 +30,6 @@
 					        <th>Lote</th>
 					        <th>Lote Total de productos</th>
 					        <th>Fecha de Produccion</th>
-					        <th>Productos Procesados</th>
-					        <th>Productos Excluidos</th>
 					        <th style="width: 36px;"></th>
 					        <th style="width: 36px;"></th>
 					        <th style="width: 36px;"></th>
@@ -46,9 +44,8 @@
 					        <td><span class="label label-primary">{{record.data.lote.idcomposed || record.data.lote.id}}</span></td>
 					        <td>{{record.data.loteTotal || 0}}</td>
 					        <td>{{record.createdAt | date:"yyyy-MM-dd"}}</td>
-					        <td ng-init="getProduced()">{{record.produced || 0}}</td>
-					        <td ng-init="getExcluded()">{{record.excluded || 0}}</td>
-					        <td><button ng-click="productionReport()" type="button" class="btn btn-success btn-xs"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;Reporte de producción</button></td>
+                         	<td><button ng-click="productionReport()" type="button" class="btn btn-success btn-xs"><i class="glyphicon glyphicon-print"></i>&nbsp;Producción</button></td>
+                        	<td><button ng-click="productionReportCustom()" type="button" class="btn btn-success btn-xs"><i class="glyphicon glyphicon-print"></i>&nbsp;Personalizada</button></td>
 					        <td><button ng-click="borrar()" type="button" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i></button></td>
 					      </tr>
 					    </tbody>

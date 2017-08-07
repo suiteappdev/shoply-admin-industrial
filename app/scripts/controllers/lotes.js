@@ -31,67 +31,9 @@ angular.module('shoplyApp')
     }
 
     $scope.getExcluded = function(){
-        console.log("excluded", this.record)
-
         this.record.excluded = this.record.data.request.filter(function(record){
             return !record.add;
         }).length;
-    }
-
-    $scope.productionReport = function(){
-      var data = angular.copy(this.record.data.request);
-      
-      var _allcomponents = [];
-
-      for (var i = 0; i < data.length; i++) {
-        if(data[i].component){
-          for (var y = 0; y < data[i].component.length; y++) {
-                _allcomponents.push(data[i].component[y]); 
-          };          
-        }
-      };
-
-      console.log("materiales", _allcomponents);
-
-
-     var groups = _(_allcomponents).groupBy(function(o){
-          return o._id._id
-     });
-
-     console.log("groups", groups)
-
-     var out = _(groups).map(function(g, key) {
-             return { type: groups[key][0]._id , val: _(g).reduce(function( m, x ) { return m + x.cantidad; }, 0) };
-     });
-
-     console.log("out", out);
-
-      Handlebars.registerHelper('formatCurrency', function(value) {
-          return $filter('currency')(value);
-      });
-
-  Handlebars.registerHelper("debug", function(optionalValue) {
-    console.log("Current Context");
-    console.log("====================");
-    console.log(this);
-   
-    if (optionalValue) {
-      console.log("Value");
-      console.log("====================");
-      console.log(optionalValue);
-    }
-  }); 
-
-      $http.get('views/reports/production.html').success(function(res){
-        var _template = Handlebars.compile(res);
-        console.log("template", _template);
-
-        var w = window.open("", "_blank", "scrollbars=yes,resizable=no,top=200,left=200,width=350");
-        
-        w.document.write(_template({_out : out}));
-        w.print();
-        w.close();
-      });
     }
 
     $scope.MostrarTallasCantidades = function(allowWrite){
@@ -104,6 +46,7 @@ angular.module('shoplyApp')
 
     $scope.MostrarMateriales = function(allowWrite){
       $scope.components = this.record.component;
+      $scope.totalTallas = this.record.totalTallas;
 
       modal.show({templateUrl : 'views/lotes/materiales.html', size :'lg', scope : $scope, backdrop:'static'}, function($scope){
           $scope.$close();
@@ -124,7 +67,6 @@ angular.module('shoplyApp')
 
     $scope.producir = function(){
       $scope.loteActual = this.record;
-
       $scope.productionDate = new Date();
       $scope.productionRequestRecords = [];
       $scope.formProduction = {};
@@ -136,8 +78,7 @@ angular.module('shoplyApp')
           
           api.producciones().post($scope.formProduction).success(function(res){
             sweetAlert.swal("Registro completado.", "has registrado una nueva produccion.", "success");
-             console.log("res", res);
-              
+
               res.data.lote.data.estado = "Producido";
 
               api.lotes(res.data.lote._id).put(res.data.lote).success(function(response){
@@ -208,14 +149,27 @@ angular.module('shoplyApp')
       });
     }
 
+    $scope.materialSummary = function(){
+      this.record.materialTotal = ($scope.totalTallas * this.record.cantidad);
+    }
+
     $scope.summary = function(){
+      var record = this.record;
+
       if(this.record.data && this.record.data.tallas){
         var total = 0;
         for (var i = 0; i < this.record.data.tallas.length; i++) {
             total = total + this.record.data.tallas[i].cantidad;
         };
 
-        this.record.totalTallas = total;        
+        this.record.totalTallas = total;   
+
+        if(this.record && this.record.component){
+          angular.forEach(this.record.component, function(component){
+            component.totalMateriales = (component.cantidad * record.totalTallas);
+          });
+        }
+
       }
     }
  
