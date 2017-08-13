@@ -57,7 +57,7 @@ angular.module('shoplyApp')
 
      var groups = _($scope.conColor).groupBy(function(o){
           o._id.data.colorRequest = o.colorRequest.descripcion;
-          o._id.data.materialTotal = o.totalMateriales;
+          o._id.data.totalMateriales = o.totalMateriales;
 
           return o._id._id
      });
@@ -65,7 +65,11 @@ angular.module('shoplyApp')
      console.log("groups", groups)
 
      var out = _(groups).map(function(g, key) {
-             return { type: groups[key][0]._id , val: _(g).reduce(function( m, x ) { return m + x.materialTotal; }, 0) };
+             return { type: groups[key][0]._id , val: _(g).reduce(function( m, x ) {
+              console.log("m", m);
+              return m + x.totalMateriales;
+
+            }, 0) };
      });
 
      console.log("out", out);
@@ -121,14 +125,14 @@ angular.module('shoplyApp')
 
 
      var groups = _($scope.sinColor).groupBy(function(o){
-          o._id.data.materialTotal = o.totalMateriales;
+          o._id.data.totalMateriales = o.totalMateriales;
           return o._id._id
      });
 
      console.log("groups", groups)
 
      var out = _(groups).map(function(g, key) {
-             return { type: groups[key][0]._id , val: _(g).reduce(function( m, x ) { return m + x.cantidad; }, 0) };
+             return { type: groups[key][0]._id , val: _(g).reduce(function( m, x ) { return m + x.totalMateriales; }, 0) };
      });
 
      console.log("out", out);
@@ -174,9 +178,5 @@ angular.module('shoplyApp')
                }
            })
    }
-
-
-
-
     
   }]);
