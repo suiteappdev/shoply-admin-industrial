@@ -57,7 +57,7 @@ angular.module('shoplyApp')
 
      var groups = _($scope.conColor).groupBy(function(o){
           o._id.data.colorRequest = o.colorRequest.descripcion;
-          o._id.data.totalMateriales = o.totalMateriales;
+          o._id.data.materialTotal = o.materialTotal;
 
           return o._id._id
      });
@@ -67,7 +67,7 @@ angular.module('shoplyApp')
      var out = _(groups).map(function(g, key) {
              return { type: groups[key][0]._id , val: _(g).reduce(function( m, x ) {
               console.log("m", m);
-              return m + x.totalMateriales;
+              return m + x.materialTotal;
 
             }, 0) };
      });
