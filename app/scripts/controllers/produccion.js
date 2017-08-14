@@ -121,22 +121,32 @@ angular.module('shoplyApp')
         }
       };
 
-      console.log("materiales", _allcomponents);
+      console.log("materiales reporte estandar", _allcomponents);
 
 
      var groups = _($scope.sinColor).groupBy(function(o){
-          o._id.data.totalMateriales = o.totalMateriales;
+          console.log("iterador groupBy", o)
+
+          o._id.data.totalMateriales += o.totalMateriales;
           return o._id._id
      });
 
-     console.log("groups", groups)
+
+     console.log("GRUPOS", groups)
+
 
      var out = _(groups).map(function(g, key) {
-             return { type: groups[key][0]._id , val: _(g).reduce(function( m, x ) { return m + x.totalMateriales; }, 0) };
+             return { type: groups[key][0]._id , val: _(g).reduce(function( m, x ) { 
+              console.log("m", m)
+              console.log("x", x)
+
+              return m + x.totalMateriales; 
+
+            }, 0) };
      });
 
      console.log("out", out);
-
+     
       Handlebars.registerHelper('formatCurrency', function(value) {
           return $filter('currency')(value);
       });
