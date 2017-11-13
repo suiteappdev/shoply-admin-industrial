@@ -21,4 +21,14 @@ angular.module('shoplyApp')
       $state.go('dashboard.facturacion-pedido', {pedido : $stateParams.pedido});
     }
 
+    $scope.getCantidades = function(){
+      var cantidad = 0;
+
+      angular.forEach(this.record.data.tallas, function(cur){
+        cantidad = (cantidad + cur.cantidad || 0)
+      });
+
+      this.record.cantidadesTallas = cantidad;
+    }
+
   });

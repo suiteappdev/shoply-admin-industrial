@@ -43,37 +43,40 @@ angular.module('shoplyApp')
       for (var i = 0; i < data.length; i++) {
         if(data[i].component){
           for (var y = 0; y < data[i].component.length; y++) {
-                _allcomponents.push(data[i].component[y]); 
+                if(data[i].component[y].colorRequest){
+                  var exist = _allcomponents.filter(function(cur){
+                      return data[i].component[y]._id._id == cur._id._id && data[i].component[y].colorRequest.color == cur.colorRequest.color;
+                  })[0]; 
 
-                $scope.conColor = _allcomponents.filter(function(component){
-                    return component.colorRequest;
-                });
-          };          
+                    console.log("exist?", exist);
+                    if(!exist){
+                        if(data[i].component[y]._id.data.conversion){
+                              data[i].component[y].totalMateriales = data[i].component[y].totalMateriales / (data[i].component[y]._id.data.conversion.areaVolumen * data[i].component[y]._id.data.conversion.unidadCantidad)  
+                        }
+                        _allcomponents.push(data[i].component[y]);
+                        console.log("entra cuando no existe", data[i].component[y]);
+                    }else{
+                           var index = _allcomponents.indexOf(exist);
+                           console.log("el producto existe en el  array", exist);
+
+                          if(data[i].component[y]._id.data.conversion){
+                              if(index > -1){
+                                   console.log("tiene conversion y entro en la operacion", _allcomponents[index]);
+                                  _allcomponents[index].totalMateriales = (_allcomponents[index].totalMateriales + data[i].component[y].totalMateriales );
+                                  _allcomponents[index].totalMateriales = _allcomponents[index].totalMateriales / (data[i].component[y]._id.data.conversion.areaVolumen * data[i].component[y]._id.data.conversion.unidadCantidad)
+                              }                            
+                            }else{
+                               console.log("no tiene conversion y entro en la operacion", index);
+                              _allcomponents[index].totalMateriales =  ((_allcomponents[index].totalMateriales + data[i].component[y].totalMateriales));
+                            }
+                    }                 
+                }
+          };       
         }
       };
 
-      console.log("materiales", _allcomponents);
-
-
-     var groups = _($scope.conColor).groupBy(function(o){
-          o._id.data.colorRequest = o.colorRequest.descripcion;
-          o._id.data.materialTotal = o.materialTotal;
-
-          return o._id._id
-     });
-
-     console.log("groups", groups)
-
-     var out = _(groups).map(function(g, key) {
-             return { type: groups[key][0]._id , val: _(g).reduce(function( m, x ) {
-              console.log("m", m);
-              return m + x.materialTotal;
-
-            }, 0) };
-     });
-
-     console.log("out", out);
-
+      console.log("_allcomponents", _allcomponents);
+      
       Handlebars.registerHelper('formatCurrency', function(value) {
           return $filter('currency')(value);
       });
@@ -96,7 +99,7 @@ angular.module('shoplyApp')
 
         var w = window.open("", "_blank", "scrollbars=yes,resizable=no,top=200,left=200,width=350");
         
-        w.document.write(_template({_out : out}));
+        w.document.write(_template({_out : _allcomponents}));
         w.print();
         w.close();
       });
@@ -114,9 +117,9 @@ angular.module('shoplyApp')
           for (var y = 0; y < data[i].component.length; y++) {
                 _allcomponents.push(data[i].component[y]); 
 
-                $scope.sinColor = _allcomponents.filter(function(component){
+                /*$scope.sinColor = _allcomponents.filter(function(component){
                     return !component.colorRequest;
-                });
+                });*/
           };          
         }
       };
@@ -124,7 +127,7 @@ angular.module('shoplyApp')
       console.log("materiales reporte estandar", _allcomponents);
 
 
-     var groups = _($scope.sinColor).groupBy(function(o){
+     var groups = _(_allcomponents).groupBy(function(o){
           console.log("iterador groupBy", o)
 
           o._id.data.totalMateriales += o.totalMateriales;

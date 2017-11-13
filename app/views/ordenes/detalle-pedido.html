@@ -88,7 +88,7 @@ padding: 10px;">
     							<tr dir-paginate="record in record.shoppingCart | itemsPerPage: 5">
                                     <td>{{record.idcomposed}}</td>
     								<td>{{record.producto}}</td>
-                                    <td>{{record.cantidad}}</td>
+                                    <td ng-init="getCantidades()">{{record.cantidadesTallas || record.cantidad}}</td>
     								<td>{{(record.precio + record.valor_utilidad) || 0 | currency :"$ "}}</td>
                                     <td>{{record._iva.data.valor || 0}}</td>
                                     <td>{{record.porcentajeDTO || 0}}</td>
